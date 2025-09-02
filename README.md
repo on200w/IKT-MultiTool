@@ -53,9 +53,11 @@ dotnet run</code></pre>
 
 <h2>🖼 Skjermbilde</h2>
 <p align="center">
-  <img src="https://i.postimg.cc/dQmFYM0B/image.png" alt="IKT MultiTool meny" width="500">
-  <br>
-  <img src="https://i.postimg.cc/4yThhCCP/image.png" alt="Office cache panel" width="500">
+  <img src="https://i.postimg.cc/dQmFYM0B/image.png" alt="IKT MultiTool meny" width="500"><br>
+  <em>Hovedmeny: Velg panel for system, nettverk, bruker, vedlikehold, filer, cache og mer</em>
+  <br><br>
+  <img src="https://i.postimg.cc/4yThhCCP/image.png" alt="Office cache panel" width="500"><br>
+  <em>OfficeCachePanel: Rydd opp i Teams, OneNote og Office-cache, fjern credentials og fiks error 48v35</em>
 </p>
 
 <hr>
