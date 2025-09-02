@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -58,6 +59,9 @@ namespace IKTMultiTool
                 btn.Click += (s, e) => actions[idx]();
                 layout.Controls.Add(btn);
             }
+            Color lilla = Color.FromArgb(120, 60, 200);
+            if (outputBox != null)
+                outputBox.ForeColor = lilla;
             int maxBtnWidth = 0;
             foreach (Control c in layout.Controls)
                 if (c.Width > maxBtnWidth) maxBtnWidth = c.Width;

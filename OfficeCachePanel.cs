@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -42,12 +43,13 @@ namespace IKTMultiTool
                 ReadOnly = true,
                 Multiline = true,
                 Dock = DockStyle.Top,
-                Height = 40,
-                BackColor = Color.FromArgb(45,45,45),
-                ForeColor = Color.Gold,
-                BorderStyle = BorderStyle.FixedSingle,
-                Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                Margin = new Padding(0, 0, 0, 15) // Ekstra mellomrom under infoBox
+                Height = 48, // Litt høyere for å unngå kutting
+                BackColor = Color.FromArgb(45, 45, 45), // Mørk bakgrunn
+                ForeColor = Color.Yellow,
+                BorderStyle = BorderStyle.None,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                Margin = new Padding(0, 0, 0, 15),
+                Padding = new Padding(6, 8, 6, 8) // Mer padding oppe og nede
             };
             layout.Controls.Add(infoBox);
             string[] btnTexts = {
@@ -82,6 +84,12 @@ namespace IKTMultiTool
                 btn.Click += (s, e) => RunCmd(cmds[idx]);
                 layout.Controls.Add(btn);
             }
+            Color lilla = Color.FromArgb(120, 60, 200);
+            foreach (var btn in layout.Controls.OfType<Button>())
+            {
+                btn.BackColor = lilla;
+                btn.ForeColor = Color.White;
+            }
             int maxBtnWidth = 0;
             foreach (Control c in layout.Controls)
                 if (c.Width > maxBtnWidth) maxBtnWidth = c.Width;
@@ -103,6 +111,8 @@ namespace IKTMultiTool
         {
             outputBox.Clear();
             string action = "";
+            Color lilla = Color.FromArgb(120, 60, 200);
+            outputBox.ForeColor = lilla;
             if (cmd.Contains("Teams")) action = "Sletter Teams-cache...";
             else if (cmd.Contains("OneNote")) action = "Sletter OneNote-cache...";
             else if (cmd.Contains("OfficeFileCache")) action = "Sletter Office-cache...";

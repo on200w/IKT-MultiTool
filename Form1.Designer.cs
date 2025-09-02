@@ -57,7 +57,17 @@ partial class Form1
         btnCache = new Button { Text = "🧹 Rydd cache for Office-apper (48v35 error)", AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, BackColor = Color.FromArgb(45,45,45), ForeColor = Color.Pink, FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI Emoji", 15, FontStyle.Bold), Padding = new Padding(14, 8, 14, 8) };
         btnAvslutt = new Button { Text = "❌ Avslutt", AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, BackColor = Color.FromArgb(60,0,0), ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI Emoji", 15, FontStyle.Bold), Padding = new Padding(14, 8, 14, 8) };
 
-        Button[] buttons = { btnNettverk, btnSystem, btnBruker, btnFeilsoking, btnDiverse, btnCache, btnAvslutt };
+        Button[] buttons = { btnNettverk, btnSystem, btnBruker, btnFeilsoking, btnDiverse, btnCache };
+        Color lilla = Color.FromArgb(120, 60, 200); // Lilla farge
+        Color avsluttFarge = Color.FromArgb(45,45,45); // Original avslutt-knappfarge
+        foreach (var btn in buttons)
+        {
+            btn.BackColor = lilla;
+            btn.ForeColor = Color.White;
+        }
+        btnAvslutt.BackColor = avsluttFarge;
+        btnAvslutt.ForeColor = Color.Gold;
+
         for (int i = 0; i < buttons.Length; i++)
         {
             btnWidth = buttons[i].PreferredSize.Width;

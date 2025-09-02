@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -70,6 +71,13 @@ namespace IKTMultiTool
             split.Panel1.Controls.Add(layout);
             split.Panel2.Controls.Add(outputBox);
             this.Controls.Add(split);
+            Color lilla = Color.FromArgb(120, 60, 200);
+            outputBox.ForeColor = lilla;
+            foreach (var btn in layout.Controls.OfType<Button>())
+            {
+                btn.BackColor = lilla;
+                btn.ForeColor = Color.White;
+            }
         }
         private async void RunCmd(string cmd)
         {
