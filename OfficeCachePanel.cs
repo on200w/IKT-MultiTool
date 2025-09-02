@@ -99,46 +99,45 @@ namespace IKTMultiTool
             split.Panel2.Controls.Add(outputBox);
             this.Controls.Add(split);
         }
-        private void RunCmd(string cmd)
+        private async void RunCmd(string cmd)
         {
-            outputBox.Text = "Kjører kommando...\r\n";
-            Task.Run(() =>
+            outputBox.Clear();
+            string action = "";
+            if (cmd.Contains("Teams")) action = "Sletter Teams-cache...";
+            else if (cmd.Contains("OneNote")) action = "Sletter OneNote-cache...";
+            else if (cmd.Contains("OfficeFileCache")) action = "Sletter Office-cache...";
+            else if (cmd.Contains("cmdkey")) action = "Sletter Microsoft-legitimasjoner og starter om...";
+            else action = "Utfører handling...";
+            outputBox.AppendText($"▶ {action}\r\n");
+            try
             {
-                try
-                {
-                    var psi = new ProcessStartInfo("cmd.exe", $"/c {cmd}")
-                    {
+                var proc = new Process {
+                    StartInfo = new ProcessStartInfo {
+                        FileName = "cmd.exe",
+                        Arguments = $"/c {cmd}",
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
                         UseShellExecute = false,
                         CreateNoWindow = true
-                    };
-                    var proc = Process.Start(psi);
-                    if (proc != null)
-                    {
-                        string output = proc.StandardOutput.ReadToEnd();
-                        string error = proc.StandardError.ReadToEnd();
-                        proc.WaitForExit();
-                        this.Invoke((Action)(() => {
-                            outputBox.Text = output;
-                            if (!string.IsNullOrWhiteSpace(error))
-                                outputBox.AppendText("\r\nFeil:\r\n" + error);
-                        }));
                     }
-                    else
-                    {
-                        this.Invoke((Action)(() => {
-                            outputBox.Text = "Feil: Kunne ikke starte prosess.";
-                        }));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    this.Invoke((Action)(() => {
-                        outputBox.Text = $"Feil: {ex.Message}";
-                    }));
-                }
-            });
+                };
+                proc.Start();
+                string stdOut = await proc.StandardOutput.ReadToEndAsync();
+                string stdErr = await proc.StandardError.ReadToEndAsync();
+                proc.WaitForExit();
+                if (!string.IsNullOrWhiteSpace(stdOut))
+                    outputBox.AppendText($"{stdOut.Trim()}\r\n");
+                if (!string.IsNullOrWhiteSpace(stdErr))
+                    outputBox.AppendText($"❌ Feil: {stdErr.Trim()}\r\n");
+                if (proc.ExitCode == 0)
+                    outputBox.AppendText($"✅ Ferdig: {action.Replace("Sletter", "Slettet")}\r\n");
+                else
+                    outputBox.AppendText($"❌ Noe gikk galt under {action.ToLower()}\r\n");
+            }
+            catch (Exception ex)
+            {
+                outputBox.AppendText($"❌ Unntak: {ex.Message}\r\n");
+            }
         }
     }
 }
