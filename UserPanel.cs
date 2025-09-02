@@ -60,8 +60,18 @@ namespace IKTMultiTool
                 layout.Controls.Add(btn);
             }
             Color lilla = Color.FromArgb(120, 60, 200);
-            if (outputBox != null)
-                outputBox.ForeColor = lilla;
+            Font knappFont = new Font("Segoe UI Emoji", 10, FontStyle.Bold);
+            Padding knappPadding = new Padding(8, 4, 8, 4);
+            int knappMargin = 12;
+            foreach (var btn in layout.Controls.OfType<Button>())
+            {
+                btn.BackColor = lilla;
+                btn.ForeColor = Color.White;
+                btn.Font = knappFont;
+                btn.FlatStyle = FlatStyle.Flat;
+                btn.Padding = knappPadding;
+                btn.Margin = new Padding(0, 0, 0, knappMargin);
+            }
             int maxBtnWidth = 0;
             foreach (Control c in layout.Controls)
                 if (c.Width > maxBtnWidth) maxBtnWidth = c.Width;
