@@ -51,7 +51,7 @@ dotnet run</code></pre>
 
 <hr>
 
-<h2>🖼 Skjermbilde</h2>
+<h2>🖼 Hvordan programmet ser ut</h2>
 <p align="center">
   <img src="https://i.postimg.cc/dQmFYM0B/image.png" alt="IKT MultiTool meny" width="500"><br>
   <em>Hovedmeny: Velg panel for system, nettverk, bruker, vedlikehold, filer, cache og mer</em>
