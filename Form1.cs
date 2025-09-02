@@ -1,0 +1,77 @@
+using System.Windows.Forms;
+using System.Drawing;
+
+namespace IKTMultiTool
+{
+    public partial class Form1 : Form
+    {
+        private UserControl? currentPanel;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void ShowCategory(string category)
+        {
+            if (currentPanel != null)
+            {
+                this.Controls.Remove(currentPanel);
+                currentPanel.Dispose();
+                currentPanel = null;
+            }
+            switch (category)
+            {
+                case "Nettverk":
+                    var netPanel = new NetworkPanel();
+                    netPanel.OnBack += ShowMainMenu;
+                    currentPanel = netPanel;
+                    break;
+                case "System":
+                    var sysPanel = new SystemPanel();
+                    sysPanel.OnBack += ShowMainMenu;
+                    currentPanel = sysPanel;
+                    break;
+                case "Bruker":
+                    var userPanel = new UserPanel();
+                    userPanel.OnBack += ShowMainMenu;
+                    currentPanel = userPanel;
+                    break;
+                case "Feilsøking":
+                case "Feilsøking og vedlikehold":
+                case "Feilsoking":
+                    var maintenancePanel = new MaintenancePanel();
+                    maintenancePanel.OnBack += ShowMainMenu;
+                    currentPanel = maintenancePanel;
+                    break;
+                case "Diverse":
+                    var miscPanel = new MiscPanel();
+                    miscPanel.OnBack += ShowMainMenu;
+                    currentPanel = miscPanel;
+                    break;
+                case "Cache":
+                    var officeCachePanel = new OfficeCachePanel();
+                    officeCachePanel.OnBack += ShowMainMenu;
+                    currentPanel = officeCachePanel;
+                    break;
+                default:
+                    MessageBox.Show($"Meny for '{category}' er ikke implementert ennå.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+            }
+            currentPanel.Dock = DockStyle.Fill;
+            this.Controls.Add(currentPanel);
+            currentPanel.BringToFront();
+        }
+
+        private void ShowMainMenu()
+        {
+            if (currentPanel != null)
+            {
+                this.Controls.Remove(currentPanel);
+                currentPanel.Dispose();
+                currentPanel = null;
+            }
+            // Hovedmeny vises automatisk fordi den ligger i mainPanel
+        }
+    }
+}
