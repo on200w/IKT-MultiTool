@@ -6,6 +6,22 @@
 
 <hr>
 
+<h2>🆕 Nye fixes/funksjoner</h2>
+<ul>
+  <li>Alle knapper har fått lik lilla farge for et helhetlig og moderne uttrykk</li>
+  <li>Avslutt-knappen har egen farge for tydelig skille</li>
+  <li>Tekstboksen for instruksjoner har fått bedre design og lesbarhet</li>
+  <li>Kommando-linje tekst (outputBox) har fått samme lilla farge som knappene</li>
+  <li>Forbedret loggføring: status før, under og etter hver handling, feilmeldinger og oppsummering</li>
+  <li>Nullreferanse-feil i UserPanel er fikset</li>
+  <li>Skjermbilder og beskrivende tekst lagt til i README</li>
+  <li>Alle cache/cleaning-knapper og instruksjoner vises i riktig rekkefølge</li>
+  <li>UI-justeringer: padding, margin, font og farger for bedre oversikt</li>
+  <li>.gitignore og automatisk søk etter sensitiv informasjon før GitHub-opplasting</li>
+</ul>
+
+<hr>
+
 <h2>✨ Funksjoner</h2>
 <ul>
   <li>🖥️ <strong>Systeminfo</strong> – Maskinvare, drivere, diskplass, prosesser</li>
@@ -53,27 +69,11 @@ dotnet run</code></pre>
 
 <h2>🖼 Hvordan programmet ser ut</h2>
 <p align="center">
-  <img src="https://i.postimg.cc/dQmFYM0B/image.png" alt="IKT MultiTool meny" width="500"><br>
+  <img src="https://i.postimg.cc/8kKF4768/image.png" alt="IKT MultiTool meny" width="500"><br>
   <em>Hovedmeny: Velg panel for system, nettverk, bruker, vedlikehold, filer, cache og mer</em>
   <br><br>
-  <img src="https://i.postimg.cc/FHbwRVx3/image.png" alt="Office cache panel" width="500"><br>
+  <img src="https://i.postimg.cc/2y3srcGx/image.png" alt="Office cache panel" width="500"><br>
   <em>OfficeCachePanel: Rydd opp i Teams, OneNote og Office-cache, fjern credentials og fiks error 48v35</em>
 </p>
-
-<hr>
-
-<h2>🆕 Nye fixes/funksjoner</h2>
-<ul>
-  <li>Alle knapper har fått lik lilla farge for et helhetlig og moderne uttrykk</li>
-  <li>Avslutt-knappen har egen farge for tydelig skille</li>
-  <li>Tekstboksen for instruksjoner har fått bedre design og lesbarhet</li>
-  <li>Kommando-linje tekst (outputBox) har fått samme lilla farge som knappene</li>
-  <li>Forbedret loggføring: status før, under og etter hver handling, feilmeldinger og oppsummering</li>
-  <li>Nullreferanse-feil i UserPanel er fikset</li>
-  <li>Skjermbilder og beskrivende tekst lagt til i README</li>
-  <li>Alle cache/cleaning-knapper og instruksjoner vises i riktig rekkefølge</li>
-  <li>UI-justeringer: padding, margin, font og farger for bedre oversikt</li>
-  <li>.gitignore og automatisk søk etter sensitiv informasjon før GitHub-opplasting</li>
-</ul>
 
 <hr>
