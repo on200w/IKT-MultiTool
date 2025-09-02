@@ -51,40 +51,11 @@ dotnet run</code></pre>
 
 <hr>
 
-<h2>🧩 Relatert verktøy: QR-kode Generator</h2>
-<p>
-For å generere QR-koder (inkludert farger, logo-støtte og flere filformater), se mitt andre prosjekt
-<a href="https://github.com/on200w/QR-Kode-gen">QR-Kode-gen</a>. Detaljer og skjermbilder finnes på repo-siden.
-</p>
-
-<h3>🚀 Bruk (QR-Kode Generator)</h3>
-<ol>
-  <li><strong>Klon repoet</strong>:
-    <pre><code>git clone https://github.com/on200w/QR-Kode-gen.git
-cd QR-Kode-gen</code></pre>
-  </li>
-  <li><strong>Installer avhengigheter</strong>:
-    <pre><code>pip install pillow qrcode</code></pre>
-  </li>
-  <li><strong>Kjør programmet</strong>:
-    <pre><code>python "QR-Kode gen.py"</code></pre>
-  </li>
-  <li><strong>Bruk</strong>:
-    <ul>
-      <li>Skriv inn lenken eller teksten i feltet.</li>
-      <li>Velg forgrunns- og bakgrunnsfarge.</li>
-      <li>Valgfritt: Velg en logo-fil for å plassere i midten.</li>
-      <li>Klikk <em>"Generer QR-kode"</em> for forhåndsvisning.</li>
-      <li>Klikk <em>"Lagre QR-kode"</em> og velg ønsket filformat (PNG, JPG, SVG).</li>
-    </ul>
-  </li>
-</ol>
-
-<hr>
-
 <h2>🖼 Skjermbilde</h2>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/on200w/IKT-MultiTool/master/screenshots/mainmenu.png" alt="IKT MultiTool skjermbilde" width="500">
+  <img src="https://i.postimg.cc/dQmFYM0B/image.png" alt="IKT MultiTool meny" width="500">
+  <br>
+  <img src="https://i.postimg.cc/4yThhCCP/image.png" alt="Office cache panel" width="500">
 </p>
 
 <hr>
