@@ -9,15 +9,12 @@
 <h2>🆕 Nye fixes/funksjoner</h2>
 <ul>
   <li>Alle knapper har fått lik lilla farge for et helhetlig og moderne uttrykk</li>
-  <li>Avslutt-knappen har egen farge for tydelig skille</li>
   <li>Tekstboksen for instruksjoner har fått bedre design og lesbarhet</li>
   <li>Kommando-linje tekst (outputBox) har fått samme lilla farge som knappene</li>
   <li>Forbedret loggføring: status før, under og etter hver handling, feilmeldinger og oppsummering</li>
   <li>Nullreferanse-feil i UserPanel er fikset</li>
-  <li>Skjermbilder og beskrivende tekst lagt til i README</li>
   <li>Alle cache/cleaning-knapper og instruksjoner vises i riktig rekkefølge</li>
   <li>UI-justeringer: padding, margin, font og farger for bedre oversikt</li>
-  <li>.gitignore og automatisk søk etter sensitiv informasjon før GitHub-opplasting</li>
 </ul>
 
 <hr>
