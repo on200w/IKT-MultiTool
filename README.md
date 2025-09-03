@@ -1,4 +1,4 @@
-<h1 align="center">🛠️ IKT MultiTool</h1>
+<h1 align="center">🛠️ IKT-MultiTool 1.0</h1>
 
 <p align="center">
   <em>Alt-i-ett Windows-verktøy for IT-support, feilsøking og vedlikehold</em>
