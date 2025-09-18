@@ -14,6 +14,7 @@ namespace IKTMultiTool
         private SplitContainer split;
         public NetworkPanel()
         {
+            // Logger fjernet for panelvalg
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.FromArgb(30, 30, 30);
             split = new SplitContainer {
@@ -58,7 +59,10 @@ namespace IKTMultiTool
                     Margin = new Padding(5)
                 };
                 int idx = i;
-                btn.Click += (s, e) => actions[idx]();
+                btn.Click += (s, e) => {
+                    Logger.Log($"NetworkPanel: Klikket på knapp '{btnTexts[idx]}'");
+                    actions[idx]();
+                };
                 layout.Controls.Add(btn);
             }
             int maxBtnWidth = 0;
@@ -81,6 +85,7 @@ namespace IKTMultiTool
         }
         private async void RunCmd(string cmd)
         {
+            Logger.Log($"NetworkPanel: Kjører kommando: {cmd}");
             outputBox.Text = "Kjører kommando...\r\n";
             await Task.Run(() =>
             {
@@ -120,6 +125,7 @@ namespace IKTMultiTool
         }
         private async void RunMacCmd()
         {
+            Logger.Log("NetworkPanel: Kjører MAC-adresse-kommando");
             outputBox.Text = "Henter MAC-adresser...\r\n";
             await Task.Run(() =>
             {

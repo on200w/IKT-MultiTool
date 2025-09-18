@@ -14,6 +14,7 @@ namespace IKTMultiTool
         private SplitContainer split;
         public UserPanel()
         {
+            // Logger fjernet for panelvalg
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.FromArgb(30, 30, 30);
             split = new SplitContainer {
@@ -56,7 +57,10 @@ namespace IKTMultiTool
                     Margin = new Padding(5)
                 };
                 int idx = i;
-                btn.Click += (s, e) => actions[idx]();
+                btn.Click += (s, e) => {
+                    Logger.Log($"UserPanel: Klikket på knapp '{btnTexts[idx]}'");
+                    actions[idx]();
+                };
                 layout.Controls.Add(btn);
             }
             Color lilla = Color.FromArgb(120, 60, 200);
@@ -85,6 +89,7 @@ namespace IKTMultiTool
         }
         private async void RunCmd(string cmd)
         {
+            Logger.Log($"UserPanel: Kjører kommando: {cmd}");
             try
             {
                 outputBox.Text = "Kjører kommando...\r\n";
@@ -126,6 +131,7 @@ namespace IKTMultiTool
                 values[i] = Microsoft.VisualBasic.Interaction.InputBox(prompts[i], "Input", "");
                 if (string.IsNullOrWhiteSpace(values[i])) return;
             }
+            Logger.Log($"UserPanel: Kjører input-kommando: {cmdFormat} med verdier: {string.Join(", ", values)}");
             RunCmd(string.Format(cmdFormat, values));
         }
     }

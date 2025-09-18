@@ -9,11 +9,13 @@ namespace IKTMultiTool
 
         public Form1()
         {
+            // Logger fjernet for panelvalg
             InitializeComponent();
         }
 
         private void ShowCategory(string category)
         {
+            // Logger fjernet for panelvalg
             if (currentPanel != null)
             {
                 this.Controls.Remove(currentPanel);
@@ -65,6 +67,7 @@ namespace IKTMultiTool
 
         private void ShowMainMenu()
         {
+            // Logger fjernet for panelvalg
             if (currentPanel != null)
             {
                 this.Controls.Remove(currentPanel);

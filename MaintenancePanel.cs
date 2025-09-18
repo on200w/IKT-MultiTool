@@ -14,6 +14,7 @@ namespace IKTMultiTool
         private SplitContainer split;
         public MaintenancePanel()
         {
+            // Logger fjernet for panelvalg
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.FromArgb(30, 30, 30);
             split = new SplitContainer {
@@ -67,7 +68,10 @@ namespace IKTMultiTool
                 FlatStyle = FlatStyle.Flat,
                 Margin = new Padding(5)
             };
-            btn.Click += (s, e) => action();
+            btn.Click += (s, e) => {
+                Logger.Log($"MaintenancePanel: Klikket på knapp '{text}'");
+                action();
+            };
             panel.Controls.Add(btn);
         }
         private void SetButtonsEnabled(bool enabled)
@@ -92,6 +96,7 @@ namespace IKTMultiTool
         }
         private async void RunSfc()
         {
+            Logger.Log("MaintenancePanel: Kjører SFC /scannow");
             SetButtonsEnabled(false);
             outputBox.Text = "SFC kjører, dette kan ta flere minutter...\r\n";
             await Task.Run(() =>
@@ -134,6 +139,7 @@ namespace IKTMultiTool
         }
         private async void RunCmd(string cmd)
         {
+            Logger.Log($"MaintenancePanel: Kjører kommando: {cmd}");
             SetButtonsEnabled(false);
             await Task.Run(() =>
             {

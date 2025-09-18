@@ -14,6 +14,7 @@ namespace IKTMultiTool
         private SplitContainer split;
         public OfficeCachePanel()
         {
+            // Logger fjernet for panelvalg
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.FromArgb(30, 30, 30);
             split = new SplitContainer {
@@ -81,7 +82,10 @@ namespace IKTMultiTool
                     Margin = new Padding(0, 0, 0, 15) // Mer mellomrom under hver knapp
                 };
                 int idx = i;
-                btn.Click += (s, e) => RunCmd(cmds[idx]);
+                btn.Click += (s, e) => {
+                    Logger.Log($"OfficeCachePanel: Klikket på knapp '{btnTexts[idx]}'");
+                    RunCmd(cmds[idx]);
+                };
                 layout.Controls.Add(btn);
             }
             Color lilla = Color.FromArgb(120, 60, 200);
@@ -109,6 +113,7 @@ namespace IKTMultiTool
         }
         private async void RunCmd(string cmd)
         {
+            Logger.Log($"OfficeCachePanel: Kjører kommando: {cmd}");
             outputBox.Clear();
             string action = "";
             Color lilla = Color.FromArgb(120, 60, 200);

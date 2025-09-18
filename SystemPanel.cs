@@ -15,6 +15,7 @@ namespace IKTMultiTool
         public event Action? OnBack;
         public SystemPanel()
         {
+            // Logger fjernet for panelvalg
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.FromArgb(30, 30, 30);
             split = new SplitContainer {
@@ -52,28 +53,28 @@ namespace IKTMultiTool
                 switch (i)
                 {
                     case 0:
-                        btn.Click += (s, e) => RunCmd("systeminfo");
+                        btn.Click += (s, e) => { Logger.Log("SystemPanel: Klikket på 'Systeminformasjon'"); RunCmd("systeminfo"); };
                         break;
                     case 1:
-                        btn.Click += (s, e) => RunCmd("tasklist");
+                        btn.Click += (s, e) => { Logger.Log("SystemPanel: Klikket på 'Liste over kjørende prosesser'"); RunCmd("tasklist"); };
                         break;
                     case 2:
-                        btn.Click += (s, e) => ShowDiskSpace();
+                        btn.Click += (s, e) => { Logger.Log("SystemPanel: Klikket på 'Diskplass'"); ShowDiskSpace(); };
                         break;
                     case 3:
-                        btn.Click += (s, e) => RunCmd("echo Maskinnavn: %COMPUTERNAME% & echo Bruker: %USERNAME%");
+                        btn.Click += (s, e) => { Logger.Log("SystemPanel: Klikket på 'Maskinnavn og brukernavn'"); RunCmd("echo Maskinnavn: %COMPUTERNAME% & echo Bruker: %USERNAME%"); };
                         break;
                     case 4:
-                        btn.Click += (s, e) => RunCmd("net statistics workstation");
+                        btn.Click += (s, e) => { Logger.Log("SystemPanel: Klikket på 'Oppetid'"); RunCmd("net statistics workstation"); };
                         break;
                     case 5:
-                        btn.Click += (s, e) => RunCmd("powershell -NoProfile -Command \"Get-CimInstance Win32_Processor | Select-Object Name,NumberOfCores,NumberOfLogicalProcessors,MaxClockSpeed | Format-Table; Get-CimInstance Win32_PhysicalMemory | Select-Object Manufacturer,PartNumber,Capacity,Speed | Format-Table\"");
+                        btn.Click += (s, e) => { Logger.Log("SystemPanel: Klikket på 'Maskinvareinfo (CPU/RAM)'"); RunCmd("powershell -NoProfile -Command \"Get-CimInstance Win32_Processor | Select-Object Name,NumberOfCores,NumberOfLogicalProcessors,MaxClockSpeed | Format-Table; Get-CimInstance Win32_PhysicalMemory | Select-Object Manufacturer,PartNumber,Capacity,Speed | Format-Table\""); };
                         break;
                     case 6:
-                        btn.Click += (s, e) => ListDrivers();
+                        btn.Click += (s, e) => { Logger.Log("SystemPanel: Klikket på 'Liste drivere'"); ListDrivers(); };
                         break;
                     case 7:
-                        btn.Click += (s, e) => { if (outputBox != null) outputBox.Text = GetCpuTemperature(); };
+                        btn.Click += (s, e) => { Logger.Log("SystemPanel: Klikket på 'Temperatur (WMI)'"); if (outputBox != null) outputBox.Text = GetCpuTemperature(); };
                         break;
                 }
             }
@@ -95,6 +96,7 @@ namespace IKTMultiTool
         }
         public string GetCpuTemperature()
         {
+            Logger.Log("SystemPanel: Henter CPU-temperatur");
             try
             {
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"root\WMI", "SELECT * FROM MSAcpi_ThermalZoneTemperature");
@@ -114,6 +116,7 @@ namespace IKTMultiTool
         }
         private async void RunCmd(string cmd)
         {
+            Logger.Log($"SystemPanel: Kjører kommando: {cmd}");
             try
             {
                 outputBox.Text = "Kjører kommando...\r\n";
@@ -149,6 +152,7 @@ namespace IKTMultiTool
         }
         private async void ListDrivers()
         {
+            Logger.Log("SystemPanel: Henter driveroversikt");
             try
             {
                 outputBox.Text = "Henter driveroversikt...\r\n";
@@ -205,6 +209,7 @@ namespace IKTMultiTool
         }
         private async void ShowDiskSpace()
         {
+            Logger.Log("SystemPanel: Henter diskplass");
             outputBox.Text = "Kjører kommando...\r\n";
             try
             {

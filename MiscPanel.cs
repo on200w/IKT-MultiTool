@@ -14,6 +14,7 @@ namespace IKTMultiTool
         private SplitContainer split;
         public MiscPanel()
         {
+            // Logger fjernet for panelvalg
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.FromArgb(30, 30, 30);
             split = new SplitContainer {
@@ -67,7 +68,10 @@ namespace IKTMultiTool
                 FlatStyle = FlatStyle.Flat,
                 Margin = new Padding(5)
             };
-            btn.Click += (s, e) => action();
+            btn.Click += (s, e) => {
+                Logger.Log($"MiscPanel: Klikket på knapp '{text}'");
+                action();
+            };
             panel.Controls.Add(btn);
         }
         private void AddButtonWithInput(FlowLayoutPanel panel, string text, string prompt, Action<string> action)
@@ -84,12 +88,14 @@ namespace IKTMultiTool
             };
             btn.Click += (s, e) => {
                 var input = Microsoft.VisualBasic.Interaction.InputBox($"{prompt}:", text, "");
+                Logger.Log($"MiscPanel: Klikket på knapp med input '{text}', input: '{input}'");
                 if (!string.IsNullOrWhiteSpace(input)) action(input);
             };
             panel.Controls.Add(btn);
         }
         private async void RunCmd(string cmd)
         {
+            Logger.Log($"MiscPanel: Kjører kommando: {cmd}");
             try
             {
                 outputBox.Text = "Kjører kommando...\r\n";
