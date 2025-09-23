@@ -108,7 +108,7 @@ dotnet run</code></pre>
   <li>🔒 Administrator via manifest (UAC) ved oppstart</li>
 </ul>
   <img src="https://i.postimg.cc/gJPNDtyx/image.png" alt="IKT MultiTool hovedmeny" width="500"><br>
-  <em>Hovedmeny v2.0: Strømlinjeformet med System, Nettverk, Drivere, Feilsøking og Cache</em>
+  <em>Hovedmeny v2.1: Strømlinjeformet med System, Nettverk, Drivere, Feilsøking og Cache</em>
   <br><br>
   <img src="https://i.postimg.cc/zBGZ7fFb/image.png" alt="Driver panel" width="500"><br>
   <em>Driver-panel: Administrer PC-modeller og installer drivere enkelt</em>
