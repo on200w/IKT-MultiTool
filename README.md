@@ -176,7 +176,7 @@ dotnet run</code></pre>
   <li>🎨 Forbedret UI konsistens</li>
 </ul>
 
-<h3>v1.0 (2024)</h3>
+<h3>v1.0 (2025)</h3>
 <ul>
   <li>🎉 Første versjon med grunnleggende IT-verktøy</li>
   <li>🎨 Mørkt tema og lilla fargepalett</li>
