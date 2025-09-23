@@ -28,13 +28,14 @@ namespace IKTMultiTool
                 SplitterDistance = (int)(this.Width * 0.35) // 35% til knapper, 65% til kommandolinje
             };
             
-            var layout = new FlowLayoutPanel { 
-                Dock = DockStyle.Fill, 
-                AutoScroll = true, 
-                FlowDirection = FlowDirection.TopDown, 
-                WrapContents = false, 
+            var layout = new FlowLayoutPanel {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents = false,
                 BackColor = Color.FromArgb(30, 30, 30),
-                Padding = new Padding(0, 20, 12, 20) // helt mot venstre
+                Padding = new Padding(0, 0, 12, 28), // Litt bunn-padding; fast bunnluft håndteres separat
+                AutoScrollMargin = new Size(0, 40)
             };
             
             var btnBack = new Button { 
@@ -71,7 +72,21 @@ namespace IKTMultiTool
                 BorderStyle = BorderStyle.FixedSingle,
                 WordWrap = true
             };
-            split.Panel1.Controls.Add(layout);
+            // Fast bunnluft via tabellcontainer
+            var leftTable = new TableLayoutPanel {
+                Dock = DockStyle.Fill,
+                BackColor = Color.FromArgb(30, 30, 30),
+                ColumnCount = 1,
+                RowCount = 2
+            };
+            leftTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            leftTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            leftTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
+            leftTable.Controls.Add(layout, 0, 0);
+            leftTable.Controls.Add(new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(30,30,30) }, 0, 1);
+            var leftContainer = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(30,30,30), Padding = new Padding(0,0,0,8) };
+            leftContainer.Controls.Add(leftTable);
+            split.Panel1.Controls.Add(leftContainer);
             split.Panel2.Controls.Add(outputBox);
             this.Controls.Add(split);
             
@@ -90,6 +105,16 @@ namespace IKTMultiTool
             layout.SizeChanged += (s, e) => {
                 int w = Math.Max(100, layout.ClientSize.Width - layout.Padding.Left - layout.Padding.Right);
                 foreach (var b in layout.Controls.OfType<Button>()) b.Width = w;
+            };
+
+            // Hold splitter i ~35/65 ved resize
+            this.SizeChanged += (s, e) => {
+                try
+                {
+                    var width = this.ClientSize.Width;
+                    split.SplitterDistance = Math.Max(120, (int)(width * 0.35));
+                }
+                catch { }
             };
         }
         private void AddButton(FlowLayoutPanel panel, string text, Action action)

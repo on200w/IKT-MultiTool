@@ -34,6 +34,16 @@ namespace IKTMultiTool
             };
 
             ShowMainDriverMenu();
+
+            // Hold splitter i ~35/65 ved resize
+            this.SizeChanged += (s, e) => {
+                try
+                {
+                    var width = this.ClientSize.Width;
+                    split.SplitterDistance = Math.Max(120, (int)(width * 0.35));
+                }
+                catch { }
+            };
         }
 
         private void ShowMainDriverMenu()
@@ -48,7 +58,8 @@ namespace IKTMultiTool
                 FlowDirection = FlowDirection.TopDown,
                 WrapContents = false,
                 BackColor = Color.FromArgb(30, 30, 30),
-                Padding = new Padding(0, 20, 12, 20)
+                Padding = new Padding(0, 0, 12, 28),
+                AutoScrollMargin = new Size(0, 40)
             };
 
             var btnBack = new Button
@@ -183,7 +194,21 @@ namespace IKTMultiTool
                 WordWrap = true
             };
 
-            split.Panel1.Controls.Add(layout);
+            // Fast bunnluft via tabellcontainer
+            var leftTable = new TableLayoutPanel {
+                Dock = DockStyle.Fill,
+                BackColor = Color.FromArgb(30,30,30),
+                ColumnCount = 1,
+                RowCount = 2
+            };
+            leftTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            leftTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            leftTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
+            leftTable.Controls.Add(layout, 0, 0);
+            leftTable.Controls.Add(new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(30,30,30) }, 0, 1);
+            var leftContainer = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(30,30,30), Padding = new Padding(0,0,0,8) };
+            leftContainer.Controls.Add(leftTable);
+            split.Panel1.Controls.Add(leftContainer);
             split.Panel2.Controls.Add(outputBox);
             if (!this.Controls.Contains(split)) this.Controls.Add(split);
 
@@ -205,6 +230,7 @@ namespace IKTMultiTool
                 foreach (var lab in layout.Controls.OfType<Label>()) if (!lab.AutoSize) lab.Width = w;
             };
             ApplyFullWidth(layout);
+            // Bunnluft håndteres av fast bunnrad
         }
 
         private int GetDriverCount(string folderPath)
@@ -463,7 +489,8 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                 FlowDirection = FlowDirection.TopDown,
                 WrapContents = false,
                 BackColor = Color.FromArgb(30, 30, 30),
-                Padding = new Padding(0, 20, 12, 20)
+                Padding = new Padding(0, 0, 12, 28),
+                AutoScrollMargin = new Size(0, 40)
             };
 
             var btnBack = new Button
@@ -570,7 +597,21 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                 WordWrap = true
             };
 
-            split.Panel1.Controls.Add(layout);
+            // Fast bunnluft via tabellcontainer
+            var leftTable = new TableLayoutPanel {
+                Dock = DockStyle.Fill,
+                BackColor = Color.FromArgb(30,30,30),
+                ColumnCount = 1,
+                RowCount = 2
+            };
+            leftTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            leftTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            leftTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
+            leftTable.Controls.Add(layout, 0, 0);
+            leftTable.Controls.Add(new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(30,30,30) }, 0, 1);
+            var leftContainer = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(30,30,30), Padding = new Padding(0,0,0,8) };
+            leftContainer.Controls.Add(leftTable);
+            split.Panel1.Controls.Add(leftContainer);
             split.Panel2.Controls.Add(outputBox);
 
             Color lilla2 = Color.FromArgb(120, 60, 200);
@@ -591,6 +632,10 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                 foreach (var lab in layout.Controls.OfType<Label>()) if (!lab.AutoSize) lab.Width = w;
             };
             ApplyFullWidth(layout);
+
+            // Gi siste knapp litt ekstra bunnmarg
+            var lastBtn = layout.Controls.OfType<Button>().LastOrDefault();
+            if (lastBtn != null) lastBtn.Margin = new Padding(0, 6, 8, 24);
         }
 
         private void LoadDriverButtons(FlowLayoutPanel layout, string driverPath)

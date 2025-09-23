@@ -34,7 +34,7 @@ partial class Form1
     {
         this.components = new System.ComponentModel.Container();
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(1400, 750); // Større vindu
+    this.ClientSize = new System.Drawing.Size(1400, 800); // Litt høyere vindu for mer plass nederst
         this.Text = "IKT MultiTool";
         this.FormBorderStyle = FormBorderStyle.FixedDialog;
         this.MaximizeBox = false;

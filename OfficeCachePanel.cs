@@ -33,7 +33,8 @@ namespace IKTMultiTool
                 AutoScroll = true,
                 FlowDirection = FlowDirection.TopDown,
                 WrapContents = false,
-                Padding = new Padding(0, 20, 12, 20), // Helt mot venstre, litt polstring til høyre
+                Padding = new Padding(0, 0, 12, 28), // Litt bunn-padding; fast bunnluft håndteres separat
+                AutoScrollMargin = new Size(0, 40),
                 BackColor = Color.FromArgb(30, 30, 30)
             };
             var btnBack = new Button { 
@@ -122,7 +123,21 @@ namespace IKTMultiTool
                 btn.Margin = new Padding(0, 6, 8, 6); // Minimal venstremarg, litt høyre spacing
             }
             
-            split.Panel1.Controls.Add(layout);
+            // Fast bunnluft: legg layout i tabell med synlig bunnrad
+            var leftTable = new TableLayoutPanel {
+                Dock = DockStyle.Fill,
+                BackColor = Color.FromArgb(30, 30, 30),
+                ColumnCount = 1,
+                RowCount = 2
+            };
+            leftTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            leftTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            leftTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
+            leftTable.Controls.Add(layout, 0, 0);
+            leftTable.Controls.Add(new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(30,30,30) }, 0, 1);
+            var leftContainer = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(30,30,30), Padding = new Padding(0,0,0,8) };
+            leftContainer.Controls.Add(leftTable);
+            split.Panel1.Controls.Add(leftContainer);
             outputBox = new TextBox { 
                 Multiline = true, 
                 Dock = DockStyle.Fill, 
@@ -136,6 +151,16 @@ namespace IKTMultiTool
             };
             split.Panel2.Controls.Add(outputBox);
             this.Controls.Add(split);
+
+            // Hold splitter i ~35/65 ved resize
+            this.SizeChanged += (s, e) => {
+                try
+                {
+                    var width = this.ClientSize.Width;
+                    split.SplitterDistance = Math.Max(120, (int)(width * 0.35));
+                }
+                catch { }
+            };
         }
         private async void RunCmd(string cmd)
         {

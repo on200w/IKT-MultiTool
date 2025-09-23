@@ -27,14 +27,21 @@ namespace IKTMultiTool
                 SplitterDistance = (int)(this.Width * 0.35), // 35% til knapper, 65% til kommandolinje
                 SplitterWidth = 4
             };
-            
-            var layout = new FlowLayoutPanel { 
-                Dock = DockStyle.Fill, 
-                AutoScroll = true, 
-                FlowDirection = FlowDirection.TopDown, 
-                WrapContents = false, 
+            // Container som gir fast luft nederst uavhengig av scrolling
+            var leftContainer = new Panel {
+                Dock = DockStyle.Fill,
                 BackColor = Color.FromArgb(30, 30, 30),
-                Padding = new Padding(0, 20, 12, 20) // Helt mot venstre, litt høyre padding
+                Padding = new Padding(0) // vi håndterer bunnluft via en egen bunnrad
+            };
+            
+            var layout = new FlowLayoutPanel {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents = false,
+                BackColor = Color.FromArgb(30, 30, 30),
+                Padding = new Padding(0, 0, 12, 28), // Litt bunn-padding for synlig luft når man scroller helt ned
+                AutoScrollMargin = new Size(0, 48)
             };
             
             var btnBack = new Button { 
@@ -67,6 +74,7 @@ namespace IKTMultiTool
                 () => RunMacCmd(),
                 () => RunCmd("speedtest")
             };
+            Button? lastButton = null;
             for (int i = 0; i < btnTexts.Length; i++)
             {
                 var btn = new Button
@@ -87,6 +95,7 @@ namespace IKTMultiTool
                     actions[idx]();
                 };
                 layout.Controls.Add(btn);
+                lastButton = btn;
             }
             
             // Trigger en resize for å sette riktig splitter-posisjon
@@ -103,7 +112,23 @@ namespace IKTMultiTool
                 BorderStyle = BorderStyle.FixedSingle,
                 WordWrap = true
             };
-            split.Panel1.Controls.Add(layout);
+            // Legg layout i en tabell med fast bunnrad som alltid er synlig
+            var leftTable = new TableLayoutPanel {
+                Dock = DockStyle.Fill,
+                BackColor = Color.FromArgb(30, 30, 30),
+                ColumnCount = 1,
+                RowCount = 2
+            };
+            leftTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            leftTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            leftTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F)); // alltid synlig luft nederst
+            leftTable.Controls.Add(layout, 0, 0);
+            var bottomGap = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(30, 30, 30) };
+            leftTable.Controls.Add(bottomGap, 0, 1);
+            leftContainer.Controls.Add(leftTable);
+            split.Panel1.Controls.Add(leftContainer);
+            // Liten ekstra padding helt nederst i Panel1
+            split.Panel1.Padding = new Padding(0, 0, 0, 8);
             split.Panel2.Controls.Add(outputBox);
             this.Controls.Add(split);
             
@@ -118,10 +143,28 @@ namespace IKTMultiTool
                 btn.TextAlign = ContentAlignment.MiddleLeft; // tekst mot venstre
                 btn.Margin = new Padding(0, 6, 8, 6); // minimal venstremarg
             }
+            // Gi siste knapp ekstra bunnmarg for synlig luft
+            if (lastButton != null) lastButton.Margin = new Padding(0, 6, 8, 24);
+            // Sett initial full bredde på knapper umiddelbart
+            {
+                int w = Math.Max(100, layout.ClientSize.Width - layout.Padding.Left - layout.Padding.Right);
+                foreach (var b in layout.Controls.OfType<Button>()) b.Width = w;
+            }
             // Dynamisk bredde for knapper
             layout.SizeChanged += (s, e) => {
                 int w = Math.Max(100, layout.ClientSize.Width - layout.Padding.Left - layout.Padding.Right);
                 foreach (var b in layout.Controls.OfType<Button>()) b.Width = w;
+            };
+            // Ingen ekstra scrollbart spacer; bunnluft ligger i fast bunnrad som alltid er synlig
+
+            // Hold splitter i ~35/65 ved resize
+            this.SizeChanged += (s, e) => {
+                try
+                {
+                    var width = this.ClientSize.Width;
+                    split.SplitterDistance = Math.Max(120, (int)(width * 0.35));
+                }
+                catch { /* ignorer midlertidige layout-tilstander */ }
             };
         }
         private async void RunCmd(string cmd)

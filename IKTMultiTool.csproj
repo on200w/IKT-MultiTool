@@ -27,6 +27,7 @@
 
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+  <ApplicationIcon>icon\InnlandetSafe.ico</ApplicationIcon>
   </PropertyGroup>
 
 </Project>
