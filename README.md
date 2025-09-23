@@ -29,7 +29,6 @@
 </ul>
 
 
-<h2>🆕 Nye funksjoner i v2.0</h2>
 <hr>
   <li>💾 <strong>Drivere</strong> – Administrer drivere for forskjellige PC-modeller, installer automatisk</li>
 <h2>💾 Driver-administrasjon</h2>
