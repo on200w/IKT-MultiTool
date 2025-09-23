@@ -89,49 +89,12 @@ cd IKT-MultiTool</code></pre>
     <pre><code>dotnet build
 dotnet run</code></pre>
   </li>
-<h2>� Prosjektstruktur</h2>
-<ol>
-  <li><strong>Klon repoet</strong> eller last ned filen:
-    <pre><code>git clone https://github.com/on200w/IKT-MultiTool.git
-cd IKT-MultiTool</code></pre>
-  </li>
-  <li><strong>Åpne i Visual Studio eller VS Code</strong></li>
-  <li><strong>Kjør programmet</strong>:
-    <pre><code>dotnet build
-dotnet run</code></pre>
-    <em>Merk: Programmet kan kreve administrator-rettigheter for enkelte funksjoner</em>
-  </li>
-  <li><strong>Bruk</strong>:
-    <ul>
-      <li>Velg ønsket panel fra hovedmenyen (System, Nettverk, Drivere, Feilsøking, Cache)</li>
-      <li>For drivere: Legg til PC-modeller og administrer driver-filer enkelt</li>
-      <li>Trykk på relevante knapper for feilsøking, vedlikehold eller info</li>
-      <li>Følg instruksjonene for Office error 48v35 eller andre problemer</li>
-<h2>🖼 Skjermbilder</h2>
-  </li>
-</ol>
+
+
 
 <hr>
 
-<h2>� Prosjektstruktur</h2>
-<pre><code>IKTMultiTool/
-├── drivers/                    # Driver-filer organisert per PC-modell
-│   ├── Lenovo_Thinkpad_E14_Gen6/
-│   └── README.md
-├── icon/                       # Programikoner
-├── Form1.cs                    # Hovedform og navigasjon
-├── DriverPanel.cs              # Driver-administrasjon
-├── NetworkPanel.cs             # Nettverksverktøy
-├── SystemPanel.cs              # Systemverktøy
-├── MaintenancePanel.cs         # Vedlikeholdsverktøy
-├── OfficeCachePanel.cs         # Office cache-verktøy
-├── Logger.cs                   # Loggføring
-└── README.md                   # Denne filen
-</code></pre>
-
-<hr>
-
-<h2>�🖼 Hvordan programmet ser ut</h2>
+<h2>🖼 Hvordan programmet ser ut</h2>
 <p align="center">
 <h3>v2.1 (2025)</h3>
 <ul>
