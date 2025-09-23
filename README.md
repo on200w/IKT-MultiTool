@@ -22,9 +22,9 @@
 <ul>
   <li>🖥️ <strong>System</strong> – Maskinvare, drivere, diskplass, prosesser, systeminfo</li>
   <li>🌐 <strong>Nettverk</strong> – IP-konfigurasjon, MAC-adresser, Wi-Fi-profiler, hastighetstest, ping, traceroute</li>
-  <li>� <strong>Drivere</strong> – Administrer drivere for forskjellige PC-modeller, installer automatisk</li>
+  <li>💾 <strong>Drivere</strong> – Administrer drivere for forskjellige PC-modeller, installer automatisk</li>
   <li>🛠️ <strong>Feilsøking og vedlikehold</strong> – SFC, DISM, Windows Update, diskopprydding, papirkurv</li>
-  <li>�️ <strong>Office-cache</strong> – Rydd opp i Teams, OneNote og Office-cache, fiks error 48v35</li>
+  <li>🗂️ <strong>Office-cache</strong> – Rydd opp i Teams, OneNote og Office-cache, fiks error 48v35</li>
   <li>🎨 <strong>Moderne UI</strong> – Mørkt tema, store knapper, konsistent design med lilla fargepalett</li>
 </ul>
 
