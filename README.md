@@ -1,4 +1,4 @@
-<h1 align="center">🛠️ IKT-MultiTool v2.0</h1>
+<h1 align="center">🛠️ IKT-MultiTool v2.1</h1>
 
 <p align="center">
   <em>Alt-i-ett Windows-verktøy for IT-support, feilsøking, vedlikehold og driver-administrasjon</em>
@@ -19,7 +19,6 @@
 <hr>
 
 <h2>✨ Funksjoner</h2>
-<h1 align="center">🛠️ IKT-MultiTool v2.1</h1>
   <li>🖥️ <strong>System</strong> – Maskinvare, drivere, diskplass, prosesser, systeminfo</li>
   <li>🌐 <strong>Nettverk</strong> – IP-konfigurasjon, MAC-adresser, Wi-Fi-profiler, hastighetstest, ping, traceroute</li>
   <li>� <strong>Drivere</strong> – Administrer drivere for forskjellige PC-modeller, installer automatisk</li>
