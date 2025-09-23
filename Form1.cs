@@ -34,11 +34,6 @@ namespace IKTMultiTool
                     sysPanel.OnBack += ShowMainMenu;
                     currentPanel = sysPanel;
                     break;
-                case "Bruker":
-                    var userPanel = new UserPanel();
-                    userPanel.OnBack += ShowMainMenu;
-                    currentPanel = userPanel;
-                    break;
                 case "Feilsøking":
                 case "Feilsøking og vedlikehold":
                 case "Feilsoking":
@@ -46,15 +41,15 @@ namespace IKTMultiTool
                     maintenancePanel.OnBack += ShowMainMenu;
                     currentPanel = maintenancePanel;
                     break;
-                case "Diverse":
-                    var miscPanel = new MiscPanel();
-                    miscPanel.OnBack += ShowMainMenu;
-                    currentPanel = miscPanel;
-                    break;
                 case "Cache":
                     var officeCachePanel = new OfficeCachePanel();
                     officeCachePanel.OnBack += ShowMainMenu;
                     currentPanel = officeCachePanel;
+                    break;
+                case "Drivere":
+                    var driverPanel = new DriverPanel();
+                    driverPanel.OnBack += ShowMainMenu;
+                    currentPanel = driverPanel;
                     break;
                 default:
                     MessageBox.Show($"Meny for '{category}' er ikke implementert ennå.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
