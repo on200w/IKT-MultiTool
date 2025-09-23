@@ -17,16 +17,37 @@ namespace IKTMultiTool
             // Logger fjernet for panelvalg
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.FromArgb(30, 30, 30);
+            
             split = new SplitContainer {
                 Dock = DockStyle.Fill,
                 Orientation = Orientation.Vertical,
                 BackColor = Color.FromArgb(30, 30, 30),
                 BorderStyle = BorderStyle.FixedSingle,
-                IsSplitterFixed = true
+                IsSplitterFixed = true, // Fast splitter
+                SplitterWidth = 4,
+                SplitterDistance = (int)(this.Width * 0.35) // 35% til knapper, 65% til kommandolinje
             };
-            this.Resize += (s, e) => split.SplitterDistance = (int)(this.Width * 0.35);
-            var layout = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoScroll = true, FlowDirection = FlowDirection.TopDown, WrapContents = false, BackColor = Color.FromArgb(30, 30, 30) };
-            var btnBack = new Button { Text = "⬅ Tilbake", AutoSize = true, BackColor = Color.FromArgb(45,45,45), ForeColor = Color.White, Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold), FlatStyle = FlatStyle.Flat, Margin = new Padding(5) };
+            
+            var layout = new FlowLayoutPanel { 
+                Dock = DockStyle.Fill, 
+                AutoScroll = true, 
+                FlowDirection = FlowDirection.TopDown, 
+                WrapContents = false, 
+                BackColor = Color.FromArgb(30, 30, 30),
+                Padding = new Padding(0, 20, 12, 20) // helt mot venstre
+            };
+            
+            var btnBack = new Button { 
+                Text = "⬅ Tilbake", 
+                Size = new Size(90, 80), // Fast størrelse
+                BackColor = Color.FromArgb(45,45,45), 
+                ForeColor = Color.White, 
+                Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold), 
+                FlatStyle = FlatStyle.Flat, 
+                Margin = new Padding(5),
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(10, 8, 10, 8)
+            };
             btnBack.Click += (s, e) => OnBack?.Invoke();
             layout.Controls.Add(btnBack);
             layout.Controls.Add(new Label { Height = 20, Width = 1 });
@@ -38,35 +59,52 @@ namespace IKTMultiTool
             AddButton(layout, "🧹 Rydd opp i Windows Update-cache", () => RunCmd("net stop wuauserv & del /s /q %windir%\\SoftwareDistribution\\*.* & net start wuauserv"));
             AddButton(layout, "🌐 Test internettforbindelse", () => RunCmd("ping 1.1.1.1 -n 5 & ping google.com -n 5"));
             AddButton(layout, "📑 Åpne hendelseslogg", () => RunCmd("eventvwr"));
-            int maxBtnWidth = 0;
-            foreach (Control c in layout.Controls)
-                if (c.Width > maxBtnWidth) maxBtnWidth = c.Width;
-            int minMenuWidth = maxBtnWidth + 40;
-            if (split.SplitterDistance < minMenuWidth)
-                split.SplitterDistance = minMenuWidth;
-            outputBox = new TextBox { Multiline = true, Dock = DockStyle.Fill, ReadOnly = true, BackColor = Color.Black, ForeColor = Color.Lime, Font = new Font("Consolas", 10), ScrollBars = ScrollBars.Vertical, BorderStyle = BorderStyle.FixedSingle };
+            
+            outputBox = new TextBox { 
+                Multiline = true, 
+                Dock = DockStyle.Fill, 
+                ReadOnly = true, 
+                BackColor = Color.Black, 
+                ForeColor = Color.Lime, 
+                Font = new Font("Consolas", 9), 
+                ScrollBars = ScrollBars.Vertical, 
+                BorderStyle = BorderStyle.FixedSingle,
+                WordWrap = true
+            };
             split.Panel1.Controls.Add(layout);
             split.Panel2.Controls.Add(outputBox);
             this.Controls.Add(split);
+            
             Color lilla = Color.FromArgb(120, 60, 200);
             outputBox.ForeColor = lilla;
             foreach (var btn in layout.Controls.OfType<Button>())
             {
                 btn.BackColor = lilla;
                 btn.ForeColor = Color.White;
+                btn.Height = 60; // konsistent høyde
+                btn.Font = new Font("Segoe UI Emoji", 10, FontStyle.Regular);
+                btn.TextAlign = ContentAlignment.MiddleLeft;
+                btn.Margin = new Padding(0, 6, 8, 6);
             }
+            // Dynamisk bredde så knappene fyller meny-området
+            layout.SizeChanged += (s, e) => {
+                int w = Math.Max(100, layout.ClientSize.Width - layout.Padding.Left - layout.Padding.Right);
+                foreach (var b in layout.Controls.OfType<Button>()) b.Width = w;
+            };
         }
         private void AddButton(FlowLayoutPanel panel, string text, Action action)
         {
             var btn = new Button
             {
                 Text = text,
-                AutoSize = true,
+                Size = new Size(90, 80), // startstørrelse, bredden overstyres
                 BackColor = Color.FromArgb(45, 45, 45),
                 ForeColor = Color.White,
                 Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold),
                 FlatStyle = FlatStyle.Flat,
-                Margin = new Padding(5)
+                Margin = new Padding(0, 6, 8, 6),
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(10, 8, 10, 8)
             };
             btn.Click += (s, e) => {
                 Logger.Log($"MaintenancePanel: Klikket på knapp '{text}'");

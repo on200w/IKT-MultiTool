@@ -17,25 +17,36 @@ namespace IKTMultiTool
             // Logger fjernet for panelvalg
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.FromArgb(30, 30, 30);
+            
             split = new SplitContainer {
                 Dock = DockStyle.Fill,
                 Orientation = Orientation.Vertical,
                 BackColor = Color.FromArgb(30, 30, 30),
                 BorderStyle = BorderStyle.FixedSingle,
-                IsSplitterFixed = true
+                IsSplitterFixed = true,
+                SplitterDistance = (int)(this.Width * 0.35), // 35% til knapper, 65% til kommandolinje
+                SplitterWidth = 4
             };
-            this.Resize += (s, e) => split.SplitterDistance = (int)(this.Width * 0.35);
+            
             var layout = new FlowLayoutPanel {
-                Dock = DockStyle.Top,
-                AutoSize = false,
+                Dock = DockStyle.Fill,
                 AutoScroll = true,
                 FlowDirection = FlowDirection.TopDown,
                 WrapContents = false,
-                Padding = new Padding(15, 20, 15, 20), // Mer padding rundt innholdet
-                Height = 350,
+                Padding = new Padding(0, 20, 12, 20), // Helt mot venstre, litt polstring til høyre
                 BackColor = Color.FromArgb(30, 30, 30)
             };
-            var btnBack = new Button { Text = "⬅ Tilbake", AutoSize = true, BackColor = Color.FromArgb(45,45,45), ForeColor = Color.White, Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold), FlatStyle = FlatStyle.Flat, Margin = new Padding(5) };
+            var btnBack = new Button { 
+                Text = "⬅ Tilbake", 
+                BackColor = Color.FromArgb(45,45,45), 
+                ForeColor = Color.White, 
+                Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold), 
+                FlatStyle = FlatStyle.Flat, 
+                Margin = new Padding(5),
+                Size = new Size(350, 40), // Fast størrelse
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(10, 5, 10, 5)
+            };
             btnBack.Click += (s, e) => OnBack?.Invoke();
             layout.Controls.Add(btnBack);
             layout.Controls.Add(new Label { Height = 20, Width = 1 });
@@ -43,16 +54,24 @@ namespace IKTMultiTool
                 Text = "Tips: Hvis du har problemer med Office error 48v35, trykk på alle knappene i rekkefølge for best mulig sjanse til å fjerne feilen.",
                 ReadOnly = true,
                 Multiline = true,
-                Dock = DockStyle.Top,
-                Height = 48, // Litt høyere for å unngå kutting
-                BackColor = Color.FromArgb(45, 45, 45), // Mørk bakgrunn
+                BackColor = Color.FromArgb(45, 45, 45),
                 ForeColor = Color.Yellow,
-                BorderStyle = BorderStyle.None,
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                BorderStyle = BorderStyle.FixedSingle,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
                 Margin = new Padding(0, 0, 0, 15),
-                Padding = new Padding(6, 8, 6, 8) // Mer padding oppe og nede
+                Padding = new Padding(8, 10, 8, 10),
+                WordWrap = true,
+                ScrollBars = ScrollBars.None,
+                Size = new Size(460, 70) // Tilpasset for 490px menypanel
             };
             layout.Controls.Add(infoBox);
+            // Fyll tilgjengelig bredde for knapper og infoboks når layout endrer størrelse
+            layout.SizeChanged += (s, e) => {
+                int w = Math.Max(100, layout.ClientSize.Width - layout.Padding.Left - layout.Padding.Right);
+                foreach (var b in layout.Controls.OfType<Button>())
+                    b.Width = w;
+                infoBox.Width = w;
+            };
             string[] btnTexts = {
                 "🗑️ Slett Teams-cache",
                 "🗑️ Slett OneNote-cache",
@@ -74,12 +93,15 @@ namespace IKTMultiTool
                 var btn = new Button
                 {
                     Text = btnTexts[i],
-                    AutoSize = true,
                     BackColor = Color.FromArgb(45, 45, 45),
                     ForeColor = Color.White,
-                    Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold),
+                    Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold), // Normal font for større knapper
                     FlatStyle = FlatStyle.Flat,
-                    Margin = new Padding(0, 0, 0, 15) // Mer mellomrom under hver knapp
+                    Margin = new Padding(0, 0, 0, 15),
+                    Size = new Size(460, 50), // Tilpasset for 490px menypanel
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Padding = new Padding(8, 5, 8, 5),
+                    UseCompatibleTextRendering = true // Bedre tekstrendering
                 };
                 int idx = i;
                 btn.Click += (s, e) => {
@@ -93,21 +115,25 @@ namespace IKTMultiTool
             {
                 btn.BackColor = lilla;
                 btn.ForeColor = Color.White;
+                // Høyden beholdes, bredden styres av SizeChanged over
+                btn.Height = 60;
+                btn.Font = new Font("Segoe UI Emoji", 10, FontStyle.Regular); // Sørg for emoji-støtte
+                btn.TextAlign = ContentAlignment.MiddleLeft; // Flytt tekst mot venstre
+                btn.Margin = new Padding(0, 6, 8, 6); // Minimal venstremarg, litt høyre spacing
             }
-            int maxBtnWidth = 0;
-            foreach (Control c in layout.Controls)
-                if (c.Width > maxBtnWidth) maxBtnWidth = c.Width;
-            int minMenuWidth = maxBtnWidth + 40;
-            split.SplitterDistance = Math.Max((int)(this.Width * 0.35), minMenuWidth);
-            this.Resize += (s, e) => {
-                int newMaxBtnWidth = 0;
-                foreach (Control c in layout.Controls)
-                    if (c.Width > newMaxBtnWidth) newMaxBtnWidth = c.Width;
-                int newMinMenuWidth = newMaxBtnWidth + 40;
-                split.SplitterDistance = Math.Max((int)(this.Width * 0.35), newMinMenuWidth);
-            };
+            
             split.Panel1.Controls.Add(layout);
-            outputBox = new TextBox { Multiline = true, Dock = DockStyle.Fill, ReadOnly = true, BackColor = Color.Black, ForeColor = Color.Lime, Font = new Font("Consolas", 10), ScrollBars = ScrollBars.Vertical, BorderStyle = BorderStyle.FixedSingle };
+            outputBox = new TextBox { 
+                Multiline = true, 
+                Dock = DockStyle.Fill, 
+                ReadOnly = true, 
+                BackColor = Color.Black, 
+                ForeColor = Color.Lime, 
+                Font = new Font("Consolas", 9), 
+                ScrollBars = ScrollBars.Vertical, 
+                BorderStyle = BorderStyle.FixedSingle,
+                WordWrap = true
+            };
             split.Panel2.Controls.Add(outputBox);
             this.Controls.Add(split);
         }

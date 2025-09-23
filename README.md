@@ -6,21 +6,20 @@
 
 <hr>
 
-<h2>🆕 Nye funksjoner i v2.0</h2>
+<h2>🆕 Nytt i v2.1 (design)</h2>
 <ul>
-  <li>💾 <strong>Nytt Driver-panel</strong> – Dynamisk administrasjon av PC-modeller og drivere</li>
-  <li>➕ <strong>Legg til PC-modeller</strong> – Opprett nye PC-modeller direkte i programmet</li>
-  <li>📦 <strong>Driver-installasjon</strong> – Enkelt installere drivere med ett klikk</li>
-  <li>📂 <strong>Automatisk mappestruktur</strong> – Mapper opprettes automatisk for nye PC-modeller</li>
-  <li>🗑️ <strong>Fjernet ubrukte paneler</strong> – Brukeradministrasjon og Diverse verktøy er fjernet</li>
-  <li>🎯 <strong>Strømlinjeformet grensesnitt</strong> – Kun aktuelle verktøy vises</li>
-  <li>🔧 <strong>Generelle driver-verktøy</strong> – Fungerer på tvers av alle PC-modeller</li>
+  <li>📐 65/35-layout – knappesiden ~35%, kommandovisning ~65%</li>
+  <li>⬅️ Full bredde mot venstre – knapper og overskrifter fyller hele venstre panel</li>
+  <li>🅰️ Venstrejustert tekst, jevn knapphøyde (60px), ryddige marginer</li>
+  <li>😀 Emoji-støtte (Segoe UI Emoji) over hele appen; Office-panelet viser emoji korrekt</li>
+  <li>💜 Lilla tema konsistent på knapper/utdata</li>
+  <li>🧭 Driver-panelet: seksjonsoverskrifter/labels har større bredde og følger størrelsen dynamisk</li>
 </ul>
 
 <hr>
 
 <h2>✨ Funksjoner</h2>
-<ul>
+<h1 align="center">🛠️ IKT-MultiTool v2.1</h1>
   <li>🖥️ <strong>System</strong> – Maskinvare, drivere, diskplass, prosesser, systeminfo</li>
   <li>🌐 <strong>Nettverk</strong> – IP-konfigurasjon, MAC-adresser, Wi-Fi-profiler, hastighetstest, ping, traceroute</li>
   <li>� <strong>Drivere</strong> – Administrer drivere for forskjellige PC-modeller, installer automatisk</li>
@@ -29,8 +28,10 @@
   <li>🎨 <strong>Moderne UI</strong> – Mørkt tema, store knapper, konsistent design med lilla fargepalett</li>
 </ul>
 
-<hr>
 
+<h2>🆕 Nye funksjoner i v2.0</h2>
+<hr>
+  <li>💾 <strong>Drivere</strong> – Administrer drivere for forskjellige PC-modeller, installer automatisk</li>
 <h2>💾 Driver-administrasjon</h2>
 <h3>Støttede funksjoner:</h3>
 <ul>
@@ -44,10 +45,14 @@
 <h3>Slik legger du til drivere:</h3>
 <ol>
   <li>Åpne "💾 Drivere" fra hovedmenyen</li>
-  <li>Klikk "➕ Legg til ny PC-modell" hvis din modell ikke finnes</li>
+  <li>.NET 8.0 (kun hvis du kjører framework-avhengig build)</li>
   <li>Velg PC-modellen din</li>
   <li>Klikk "📂 Åpne drivermappe for denne PC-en"</li>
   <li>Kopier driver-filer (.exe, .msi, .zip) til mappen</li>
+<blockquote>
+  <strong>Distribusjon:</strong> v2.1 bygger som standard en <em>single-file</em>, <em>self-contained</em> EXE for <code>win-x64</code> og krever administrator (UAC). Ingen .NET-installasjon trengs på målmaskinen.
+</blockquote>
+
   <li>Gå tilbake og klikk på en driver for å installere</li>
 </ol>
 
@@ -61,6 +66,18 @@
 </ul>
 
 <hr>
+  <li><strong>Kjør programmet (dev)</strong>:
+    <pre><code class="language-powershell">dotnet build
+dotnet run</code></pre>
+    <em>Merk: Appen ber om administrator ved oppstart (manifest).</em>
+  </li>
+  <li><strong>Publiser single-file (release)</strong>:
+    <pre><code class="language-powershell">dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true -p:SelfContained=true</code></pre>
+    <ul>
+      <li>Output: <code>IKTMultiTool\bin\Release\net8.0-windows\win-x64\publish\IKTMultiTool.exe</code></li>
+      <li>EXE er selvstendig (inkluderer runtime) og vil vise UAC-spørsmål ved oppstart.</li>
+    </ul>
+  </li>
 
 <h2>🚀 Bruk</h2>
 <ol>
@@ -73,7 +90,7 @@ cd IKT-MultiTool</code></pre>
     <pre><code>dotnet build
 dotnet run</code></pre>
   </li>
-<h2>🚀 Bruk</h2>
+<h2>� Prosjektstruktur</h2>
 <ol>
   <li><strong>Klon repoet</strong> eller last ned filen:
     <pre><code>git clone https://github.com/on200w/IKT-MultiTool.git
@@ -91,7 +108,7 @@ dotnet run</code></pre>
       <li>For drivere: Legg til PC-modeller og administrer driver-filer enkelt</li>
       <li>Trykk på relevante knapper for feilsøking, vedlikehold eller info</li>
       <li>Følg instruksjonene for Office error 48v35 eller andre problemer</li>
-    </ul>
+<h2>🖼 Skjermbilder</h2>
   </li>
 </ol>
 
@@ -117,6 +134,17 @@ dotnet run</code></pre>
 
 <h2>�🖼 Hvordan programmet ser ut</h2>
 <p align="center">
+<h3>v2.1 (2025)</h3>
+<ul>
+  <li>📐 65/35-layout mellom knappeside og visning</li>
+  <li>⬅️ Knapper og overskrifter fyller venstre panel i full bredde</li>
+  <li>😀 Emoji-støtte overalt; Office-panel emoji fikset</li>
+  <li>💜 Konsistent lilla tema for knapper/utdata</li>
+  <li>🧭 Driver-panel: bredere seksjonslabels og dynamisk bredde</li>
+  <li>🧰 Små UI-forbedringer: marginer, venstrejustert tekst, 60px knapphøyde</li>
+  <li>📦 Publisering: standard single-file, self-contained EXE (win-x64) med admin-krav</li>
+  <li>🔒 Administrator via manifest (UAC) ved oppstart</li>
+</ul>
   <img src="https://i.postimg.cc/QM27DM27/image.png" alt="IKT MultiTool hovedmeny" width="500"><br>
   <em>Hovedmeny v2.0: Strømlinjeformet med System, Nettverk, Drivere, Feilsøking og Cache</em>
   <br><br>

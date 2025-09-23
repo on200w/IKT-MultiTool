@@ -17,69 +17,69 @@ namespace IKTMultiTool
 
         public DriverPanel()
         {
-            // Logger fjernet for panelvalg
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.FromArgb(30, 30, 30);
-            
-            // Sett opp sti til drivere
+
             driversBasePath = Path.Combine(Application.StartupPath, "drivers");
-            
-            split = new SplitContainer 
+
+            split = new SplitContainer
             {
                 Dock = DockStyle.Fill,
                 Orientation = Orientation.Vertical,
                 BackColor = Color.FromArgb(30, 30, 30),
                 BorderStyle = BorderStyle.FixedSingle,
-                IsSplitterFixed = true
+                IsSplitterFixed = true,
+                SplitterDistance = (int)(this.Width * 0.35),
+                SplitterWidth = 4
             };
-            
-            this.Resize += (s, e) => split.SplitterDistance = (int)(this.Width * 0.35);
-            
+
             ShowMainDriverMenu();
         }
 
         private void ShowMainDriverMenu()
         {
-            // Fjern eksisterende innhold
             split.Panel1.Controls.Clear();
             split.Panel2.Controls.Clear();
-            
-            var layout = new FlowLayoutPanel 
-            { 
-                Dock = DockStyle.Fill, 
-                AutoScroll = true, 
-                FlowDirection = FlowDirection.TopDown, 
-                WrapContents = false, 
-                BackColor = Color.FromArgb(30, 30, 30) 
+
+            var layout = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents = false,
+                BackColor = Color.FromArgb(30, 30, 30),
+                Padding = new Padding(0, 20, 12, 20)
             };
-            
-            var btnBack = new Button 
-            { 
-                Text = "⬅ Tilbake", 
-                AutoSize = true, 
-                BackColor = Color.FromArgb(45,45,45), 
-                ForeColor = Color.White, 
-                Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold), 
-                FlatStyle = FlatStyle.Flat, 
-                Margin = new Padding(5) 
+
+            var btnBack = new Button
+            {
+                Text = "⬅ Tilbake",
+                BackColor = Color.FromArgb(45, 45, 45),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold),
+                FlatStyle = FlatStyle.Flat,
+                Margin = new Padding(5),
+                Size = new Size(350, 40),
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(10, 5, 10, 5)
             };
             btnBack.Click += (s, e) => OnBack?.Invoke();
             layout.Controls.Add(btnBack);
-            layout.Controls.Add(new Label { Height = 20, Width = 1 });
+            layout.Controls.Add(new Label { Height = 12, Width = 1 });
 
-            // Legg til tittel
             var titleLabel = new Label
             {
                 Text = "💾 Drivere for PC-modeller",
-                AutoSize = true,
+                AutoSize = false,
+                Height = 36,
                 ForeColor = Color.White,
                 Font = new Font("Segoe UI Emoji", 14, FontStyle.Bold),
-                Margin = new Padding(5)
+                Margin = new Padding(0, 6, 8, 6),
+                TextAlign = ContentAlignment.MiddleLeft
             };
             layout.Controls.Add(titleLabel);
             layout.Controls.Add(new Label { Height = 10, Width = 1 });
 
-            // Sjekk om drivermappen eksisterer og lag den hvis ikke
             if (!Directory.Exists(driversBasePath))
             {
                 try
@@ -93,45 +93,48 @@ namespace IKTMultiTool
                 }
             }
 
-            // Legg til PC-modeller dynamisk basert på mapper
             LoadPCModels(layout);
 
-            // Legg til funksjon for å legge til nye PC-modeller
             layout.Controls.Add(new Label { Height = 20, Width = 1 });
-            var addModelLabel = new Label
+            var adminLabel = new Label
             {
                 Text = "--- Administrasjon ---",
-                AutoSize = true,
+                AutoSize = false,
+                Height = 28,
                 ForeColor = Color.LightGray,
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                Margin = new Padding(5)
+                Margin = new Padding(0, 6, 8, 6),
+                TextAlign = ContentAlignment.MiddleLeft
             };
-            layout.Controls.Add(addModelLabel);
+            layout.Controls.Add(adminLabel);
 
             var btnAddModel = new Button
             {
                 Text = "➕ Legg til ny PC-modell",
-                AutoSize = true,
                 BackColor = Color.FromArgb(45, 45, 45),
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI Emoji", 11, FontStyle.Bold),
+                Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold),
                 FlatStyle = FlatStyle.Flat,
-                Margin = new Padding(5)
+                Margin = new Padding(5),
+                Size = new Size(90, 80),
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(10, 5, 10, 5)
             };
             btnAddModel.Click += (s, e) => ShowAddNewModelDialog();
             layout.Controls.Add(btnAddModel);
 
-            // Legg til generelle verktøy
             layout.Controls.Add(new Label { Height = 20, Width = 1 });
-            var separatorLabel = new Label
+            var generalLabel = new Label
             {
                 Text = "--- Generelle verktøy ---",
-                AutoSize = true,
+                AutoSize = false,
+                Height = 28,
                 ForeColor = Color.LightGray,
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                Margin = new Padding(5)
+                Margin = new Padding(0, 6, 8, 6),
+                TextAlign = ContentAlignment.MiddleLeft
             };
-            layout.Controls.Add(separatorLabel);
+            layout.Controls.Add(generalLabel);
 
             string[] btnTexts = {
                 "📂 Åpne hovedmappe for drivere",
@@ -140,7 +143,6 @@ namespace IKTMultiTool
                 "🔄 Oppdater alle drivere (Windows Update)",
                 "❓ Hjelp - Hvordan legge til drivere"
             };
-            
             Action[] actions = {
                 () => OpenDriverFolder(driversBasePath),
                 () => RunCmd("driverquery"),
@@ -148,79 +150,75 @@ namespace IKTMultiTool
                 () => RunCmd("powershell -Command \"Get-WindowsUpdate -Category Driver\""),
                 () => ShowHelp()
             };
-
             for (int i = 0; i < btnTexts.Length; i++)
             {
                 var btn = new Button
                 {
                     Text = btnTexts[i],
-                    AutoSize = true,
                     BackColor = Color.FromArgb(45, 45, 45),
                     ForeColor = Color.White,
                     Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold),
                     FlatStyle = FlatStyle.Flat,
-                    Margin = new Padding(5)
+                    Margin = new Padding(5),
+                    Size = new Size(90, 80),
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Padding = new Padding(10, 5, 10, 5)
                 };
                 int idx = i;
-                btn.Click += (s, e) => {
-                    Logger.Log($"DriverPanel: Klikket på knapp '{btnTexts[idx]}'");
-                    actions[idx]();
-                };
+                btn.Click += (s, e) => { Logger.Log($"DriverPanel: Klikket på knapp '{btnTexts[idx]}'"); actions[idx](); };
                 layout.Controls.Add(btn);
             }
 
-            // Juster layout
-            int maxBtnWidth = 0;
-            foreach (Control c in layout.Controls)
-                if (c.Width > maxBtnWidth) maxBtnWidth = c.Width;
-            int minMenuWidth = maxBtnWidth + 40;
-            if (split.SplitterDistance < minMenuWidth)
-                split.SplitterDistance = minMenuWidth;
-
-            outputBox = new TextBox 
-            { 
-                Multiline = true, 
-                Dock = DockStyle.Fill, 
-                ReadOnly = true, 
-                BackColor = Color.Black, 
-                ForeColor = Color.Lime, 
-                Font = new Font("Consolas", 10), 
-                ScrollBars = ScrollBars.Vertical, 
+            outputBox = new TextBox
+            {
+                Multiline = true,
+                Dock = DockStyle.Fill,
+                ReadOnly = true,
+                BackColor = Color.Black,
+                ForeColor = Color.Lime,
+                Font = new Font("Consolas", 9),
+                ScrollBars = ScrollBars.Vertical,
                 BorderStyle = BorderStyle.FixedSingle,
-                Text = "Velg en PC-modell for å se tilgjengelige drivere.\n\nDu kan også bruke de generelle verktøyene nedenfor."
+                Text = "Velg en PC-modell for å se tilgjengelige drivere.\n\nDu kan også bruke de generelle verktøyene nedenfor.",
+                WordWrap = true
             };
 
             split.Panel1.Controls.Add(layout);
             split.Panel2.Controls.Add(outputBox);
-            this.Controls.Add(split);
+            if (!this.Controls.Contains(split)) this.Controls.Add(split);
 
-            // Sett lilla farge på knappene
             Color lilla = Color.FromArgb(120, 60, 200);
             outputBox.ForeColor = lilla;
-            foreach (var btn in layout.Controls.OfType<Button>())
+            foreach (var b in layout.Controls.OfType<Button>())
             {
-                btn.BackColor = lilla;
-                btn.ForeColor = Color.White;
+                b.BackColor = lilla;
+                b.ForeColor = Color.White;
+                b.Height = 60;
+                b.Font = new Font("Segoe UI Emoji", 10, FontStyle.Regular);
+                b.TextAlign = ContentAlignment.MiddleLeft;
+                b.Margin = new Padding(0, 6, 8, 6);
             }
+            layout.SizeChanged += (s, e) =>
+            {
+                int w = Math.Max(100, layout.ClientSize.Width - layout.Padding.Left - layout.Padding.Right);
+                foreach (var b in layout.Controls.OfType<Button>()) b.Width = w;
+                foreach (var lab in layout.Controls.OfType<Label>()) if (!lab.AutoSize) lab.Width = w;
+            };
+            ApplyFullWidth(layout);
         }
 
         private int GetDriverCount(string folderPath)
         {
             try
             {
-                if (!Directory.Exists(folderPath))
-                    return 0;
-
+                if (!Directory.Exists(folderPath)) return 0;
                 return Directory.GetFiles(folderPath, "*.*")
                     .Where(f => f.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ||
-                               f.EndsWith(".msi", StringComparison.OrdinalIgnoreCase) ||
-                               f.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                                f.EndsWith(".msi", StringComparison.OrdinalIgnoreCase) ||
+                                f.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
                     .Count();
             }
-            catch
-            {
-                return 0;
-            }
+            catch { return 0; }
         }
 
         private void LoadPCModels(FlowLayoutPanel layout)
@@ -234,17 +232,17 @@ namespace IKTMultiTool
                 }
 
                 var modelDirectories = Directory.GetDirectories(driversBasePath);
-                
                 if (modelDirectories.Length == 0)
                 {
                     var noModelsLabel = new Label
                     {
                         Text = "⚠️ Ingen PC-modeller funnet. Klikk på 'Legg til ny PC-modell' for å legge til en.",
-                        AutoSize = true,
+                        AutoSize = false,
+                        Height = 40,
                         ForeColor = Color.Orange,
                         Font = new Font("Segoe UI Emoji", 10),
-                        Margin = new Padding(5),
-                        MaximumSize = new Size(300, 0)
+                        Margin = new Padding(0, 6, 8, 6),
+                        TextAlign = ContentAlignment.MiddleLeft
                     };
                     layout.Controls.Add(noModelsLabel);
                     return;
@@ -253,10 +251,12 @@ namespace IKTMultiTool
                 var pcModelsLabel = new Label
                 {
                     Text = "--- Tilgjengelige PC-modeller ---",
-                    AutoSize = true,
+                    AutoSize = false,
+                    Height = 28,
                     ForeColor = Color.LightGray,
                     Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                    Margin = new Padding(5)
+                    Margin = new Padding(0, 6, 8, 6),
+                    TextAlign = ContentAlignment.MiddleLeft
                 };
                 layout.Controls.Add(pcModelsLabel);
 
@@ -266,16 +266,18 @@ namespace IKTMultiTool
                     var displayName = GetDisplayNameFromFolder(folderName);
                     var driverCount = GetDriverCount(directory);
                     var displayText = $"🖥️ {displayName} ({driverCount} drivere)";
-                    
+
                     var btn = new Button
                     {
                         Text = displayText,
-                        AutoSize = true,
                         BackColor = Color.FromArgb(45, 45, 45),
                         ForeColor = Color.White,
-                        Font = new Font("Segoe UI Emoji", 11, FontStyle.Bold),
+                        Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold),
                         FlatStyle = FlatStyle.Flat,
                         Margin = new Padding(5),
+                        Size = new Size(90, 80),
+                        TextAlign = ContentAlignment.MiddleLeft,
+                        Padding = new Padding(10, 5, 10, 5),
                         Tag = folderName
                     };
                     btn.Click += (s, e) => ShowPCDrivers(displayName, folderName);
@@ -288,10 +290,12 @@ namespace IKTMultiTool
                 var errorLabel = new Label
                 {
                     Text = "❌ Feil ved lasting av PC-modeller",
-                    AutoSize = true,
+                    AutoSize = false,
+                    Height = 32,
                     ForeColor = Color.Red,
                     Font = new Font("Segoe UI Emoji", 10),
-                    Margin = new Padding(5)
+                    Margin = new Padding(0, 6, 8, 6),
+                    TextAlign = ContentAlignment.MiddleLeft
                 };
                 layout.Controls.Add(errorLabel);
             }
@@ -299,7 +303,6 @@ namespace IKTMultiTool
 
         private string GetDisplayNameFromFolder(string folderName)
         {
-            // Konverter mappenavn til lesbart navn
             return folderName.Replace("_", " ").Replace("-", " ");
         }
 
@@ -320,7 +323,7 @@ namespace IKTMultiTool
                     Text = "Navn på PC-modell:",
                     Location = new Point(20, 20),
                     ForeColor = Color.White,
-                    AutoSize = true,
+                    Size = new Size(200, 20),
                     Font = new Font("Segoe UI", 10)
                 };
 
@@ -376,7 +379,7 @@ namespace IKTMultiTool
                     {
                         form.DialogResult = DialogResult.OK;
                         form.Close();
-                        ShowMainDriverMenu(); // Oppdater hovedmenyen
+                        ShowMainDriverMenu();
                     }
                 };
 
@@ -395,7 +398,6 @@ namespace IKTMultiTool
         {
             try
             {
-                // Lag mappenavn fra modellnavn
                 var folderName = modelName
                     .Replace(" ", "_")
                     .Replace("-", "_")
@@ -414,7 +416,6 @@ namespace IKTMultiTool
 
                 Directory.CreateDirectory(modelPath);
 
-                // Lag en README-fil i den nye mappen
                 var readmeContent = $@"# {modelName} Drivere
 
 Legg driver-filer (.exe, .msi, .zip) for {modelName} i denne mappen.
@@ -431,7 +432,7 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                 File.WriteAllText(Path.Combine(modelPath, "LEGG_DRIVERE_HER.txt"), readmeContent);
 
                 Logger.Log($"DriverPanel: Opprettet ny PC-modell: {modelName} (mappe: {folderName})");
-                
+
                 if (outputBox != null)
                 {
                     outputBox.Text = $"Opprettet ny PC-modell: {modelName}\nMappe: {modelPath}\n\nKlikk på modellen for å legge til drivere.";
@@ -451,47 +452,49 @@ Slett denne filen når du har lagt til ekte driver-filer.";
         private void ShowPCDrivers(string pcName, string folderName)
         {
             var driverPath = Path.Combine(driversBasePath, folderName);
-            
-            // Fjern eksisterende innhold
+
             split.Panel1.Controls.Clear();
             split.Panel2.Controls.Clear();
-            
-            var layout = new FlowLayoutPanel 
-            { 
-                Dock = DockStyle.Fill, 
-                AutoScroll = true, 
-                FlowDirection = FlowDirection.TopDown, 
-                WrapContents = false, 
-                BackColor = Color.FromArgb(30, 30, 30) 
+
+            var layout = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents = false,
+                BackColor = Color.FromArgb(30, 30, 30),
+                Padding = new Padding(0, 20, 12, 20)
             };
-            
-            var btnBack = new Button 
-            { 
-                Text = "⬅ Tilbake til hovedmeny", 
-                AutoSize = true, 
-                BackColor = Color.FromArgb(45,45,45), 
-                ForeColor = Color.White, 
-                Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold), 
-                FlatStyle = FlatStyle.Flat, 
-                Margin = new Padding(5) 
+
+            var btnBack = new Button
+            {
+                Text = "⬅ Tilbake til hovedmeny",
+                BackColor = Color.FromArgb(45, 45, 45),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold),
+                FlatStyle = FlatStyle.Flat,
+                Margin = new Padding(5),
+                Size = new Size(350, 40),
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(10, 5, 10, 5)
             };
             btnBack.Click += (s, e) => ShowMainDriverMenu();
             layout.Controls.Add(btnBack);
             layout.Controls.Add(new Label { Height = 20, Width = 1 });
 
-            // Legg til tittel
             var titleLabel = new Label
             {
                 Text = $"💾 {pcName}",
-                AutoSize = true,
+                AutoSize = false,
+                Height = 32,
                 ForeColor = Color.White,
                 Font = new Font("Segoe UI Emoji", 12, FontStyle.Bold),
-                Margin = new Padding(5)
+                Margin = new Padding(0, 6, 8, 6),
+                TextAlign = ContentAlignment.MiddleLeft
             };
             layout.Controls.Add(titleLabel);
             layout.Controls.Add(new Label { Height = 10, Width = 1 });
 
-            // Sjekk om mappen eksisterer og lag den hvis ikke
             if (!Directory.Exists(driverPath))
             {
                 try
@@ -505,18 +508,18 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                 }
             }
 
-            // Last inn tilgjengelige drivere for denne PC-en
             LoadDriverButtons(layout, driverPath);
 
-            // Legg til verktøy spesifikke for denne PC-en
             layout.Controls.Add(new Label { Height = 20, Width = 1 });
             var separatorLabel = new Label
             {
                 Text = "--- Verktøy ---",
-                AutoSize = true,
+                AutoSize = false,
+                Height = 28,
                 ForeColor = Color.LightGray,
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                Margin = new Padding(5)
+                Margin = new Padding(0, 6, 8, 6),
+                TextAlign = ContentAlignment.MiddleLeft
             };
             layout.Controls.Add(separatorLabel);
 
@@ -526,66 +529,68 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                 "🖥️ Vis maskinvareinfo",
                 "❓ Hjelp - Hvordan legge til drivere"
             };
-            
             Action[] actions = {
                 () => OpenDriverFolder(driverPath),
                 () => RunCmd("driverquery"),
                 () => RunCmd("msinfo32"),
                 () => ShowHelp()
             };
-
             for (int i = 0; i < btnTexts.Length; i++)
             {
                 var btn = new Button
                 {
                     Text = btnTexts[i],
-                    AutoSize = true,
+                    Size = new Size(90, 80),
                     BackColor = Color.FromArgb(45, 45, 45),
                     ForeColor = Color.White,
                     Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold),
                     FlatStyle = FlatStyle.Flat,
-                    Margin = new Padding(5)
+                    Margin = new Padding(5),
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Padding = new Padding(10, 5, 10, 5)
                 };
                 int idx = i;
-                btn.Click += (s, e) => {
-                    Logger.Log($"DriverPanel: Klikket på knapp '{btnTexts[idx]}' for {pcName}");
-                    actions[idx]();
-                };
+                btn.Click += (s, e) => { Logger.Log($"DriverPanel: Klikket på knapp '{btnTexts[idx]}' for {pcName}"); actions[idx](); };
                 layout.Controls.Add(btn);
             }
 
-            // Juster layout
-            int maxBtnWidth = 0;
-            foreach (Control c in layout.Controls)
-                if (c.Width > maxBtnWidth) maxBtnWidth = c.Width;
-            int minMenuWidth = maxBtnWidth + 40;
-            if (split.SplitterDistance < minMenuWidth)
-                split.SplitterDistance = minMenuWidth;
+            this.OnResize(EventArgs.Empty);
 
-            outputBox = new TextBox 
-            { 
-                Multiline = true, 
-                Dock = DockStyle.Fill, 
-                ReadOnly = true, 
-                BackColor = Color.Black, 
-                ForeColor = Color.Lime, 
-                Font = new Font("Consolas", 10), 
-                ScrollBars = ScrollBars.Vertical, 
+            outputBox = new TextBox
+            {
+                Multiline = true,
+                Dock = DockStyle.Fill,
+                ReadOnly = true,
+                BackColor = Color.Black,
+                ForeColor = Color.Lime,
+                Font = new Font("Consolas", 9),
+                ScrollBars = ScrollBars.Vertical,
                 BorderStyle = BorderStyle.FixedSingle,
-                Text = $"Drivere for {pcName}\n\nKlikk på en driver for å installere den."
+                Text = $"Drivere for {pcName}\n\nKlikk på en driver for å installere den.",
+                WordWrap = true
             };
 
             split.Panel1.Controls.Add(layout);
             split.Panel2.Controls.Add(outputBox);
 
-            // Sett lilla farge på knappene
-            Color lilla = Color.FromArgb(120, 60, 200);
-            outputBox.ForeColor = lilla;
-            foreach (var btn in layout.Controls.OfType<Button>())
+            Color lilla2 = Color.FromArgb(120, 60, 200);
+            outputBox.ForeColor = lilla2;
+            foreach (var b in layout.Controls.OfType<Button>())
             {
-                btn.BackColor = lilla;
-                btn.ForeColor = Color.White;
+                b.BackColor = lilla2;
+                b.ForeColor = Color.White;
+                b.Height = 60;
+                b.Font = new Font("Segoe UI Emoji", 10, FontStyle.Regular);
+                b.TextAlign = ContentAlignment.MiddleLeft;
+                b.Margin = new Padding(0, 6, 8, 6);
             }
+            layout.SizeChanged += (s, e) =>
+            {
+                int w = Math.Max(100, layout.ClientSize.Width - layout.Padding.Left - layout.Padding.Right);
+                foreach (var b in layout.Controls.OfType<Button>()) b.Width = w;
+                foreach (var lab in layout.Controls.OfType<Label>()) if (!lab.AutoSize) lab.Width = w;
+            };
+            ApplyFullWidth(layout);
         }
 
         private void LoadDriverButtons(FlowLayoutPanel layout, string driverPath)
@@ -596,8 +601,8 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                 {
                     var driverFiles = Directory.GetFiles(driverPath, "*.*")
                         .Where(f => f.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ||
-                                   f.EndsWith(".msi", StringComparison.OrdinalIgnoreCase) ||
-                                   f.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                                    f.EndsWith(".msi", StringComparison.OrdinalIgnoreCase) ||
+                                    f.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
                         .ToArray();
 
                     if (driverFiles.Length > 0)
@@ -605,10 +610,12 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                         var driverLabel = new Label
                         {
                             Text = "--- Tilgjengelige drivere ---",
-                            AutoSize = true,
+                            AutoSize = false,
+                            Height = 28,
                             ForeColor = Color.LightGray,
                             Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                            Margin = new Padding(5)
+                            Margin = new Padding(0, 6, 8, 6),
+                            TextAlign = ContentAlignment.MiddleLeft
                         };
                         layout.Controls.Add(driverLabel);
 
@@ -618,12 +625,14 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                             var btn = new Button
                             {
                                 Text = $"📦 {fileName}",
-                                AutoSize = true,
                                 BackColor = Color.FromArgb(45, 45, 45),
                                 ForeColor = Color.White,
                                 Font = new Font("Segoe UI Emoji", 10, FontStyle.Bold),
                                 FlatStyle = FlatStyle.Flat,
-                                Margin = new Padding(5)
+                                Margin = new Padding(5),
+                                Size = new Size(90, 80),
+                                TextAlign = ContentAlignment.MiddleLeft,
+                                Padding = new Padding(10, 5, 10, 5)
                             };
                             btn.Click += (s, e) => InstallDriver(driverFile);
                             layout.Controls.Add(btn);
@@ -634,10 +643,12 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                         var noDriversLabel = new Label
                         {
                             Text = "⚠️ Ingen drivere funnet i mappen",
-                            AutoSize = true,
+                            AutoSize = false,
+                            Height = 32,
                             ForeColor = Color.Orange,
                             Font = new Font("Segoe UI Emoji", 10),
-                            Margin = new Padding(5)
+                            Margin = new Padding(0, 6, 8, 6),
+                            TextAlign = ContentAlignment.MiddleLeft
                         };
                         layout.Controls.Add(noDriversLabel);
                     }
@@ -649,10 +660,12 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                 var errorLabel = new Label
                 {
                     Text = "❌ Feil ved lasting av drivere",
-                    AutoSize = true,
+                    AutoSize = false,
+                    Height = 32,
                     ForeColor = Color.Red,
                     Font = new Font("Segoe UI Emoji", 10),
-                    Margin = new Padding(5)
+                    Margin = new Padding(0, 6, 8, 6),
+                    TextAlign = ContentAlignment.MiddleLeft
                 };
                 layout.Controls.Add(errorLabel);
             }
@@ -664,7 +677,7 @@ Slett denne filen når du har lagt til ekte driver-filer.";
             {
                 var fileName = Path.GetFileName(driverPath);
                 var fileExtension = Path.GetExtension(driverPath).ToLower();
-                
+
                 if (outputBox != null)
                 {
                     outputBox.Text = $"Starter stille installasjon av driver: {fileName}\r\n";
@@ -673,11 +686,9 @@ Slett denne filen når du har lagt til ekte driver-filer.";
 
                 ProcessStartInfo psi;
 
-                // Bestem installasjonsmodus basert på filtype
                 switch (fileExtension)
                 {
                     case ".msi":
-                        // MSI-filer: Bruk msiexec med stille parametere
                         psi = new ProcessStartInfo
                         {
                             FileName = "msiexec.exe",
@@ -686,30 +697,20 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                             Verb = "runas",
                             CreateNoWindow = true
                         };
-                        if (outputBox != null)
-                        {
-                            outputBox.AppendText($"Installerer MSI-pakke i stille modus...\r\n");
-                        }
+                        if (outputBox != null) outputBox.AppendText($"Installerer MSI-pakke i stille modus...\r\n");
                         break;
-
                     case ".exe":
-                        // EXE-filer: Prøv vanlige stille parametere
                         psi = new ProcessStartInfo
                         {
                             FileName = driverPath,
-                            Arguments = "/S /silent /quiet /verysilent /norestart", // Vanlige stille parametere
+                            Arguments = "/S /silent /quiet /verysilent /norestart",
                             UseShellExecute = true,
                             Verb = "runas",
                             CreateNoWindow = true
                         };
-                        if (outputBox != null)
-                        {
-                            outputBox.AppendText($"Installerer EXE med stille parametere...\r\n");
-                        }
+                        if (outputBox != null) outputBox.AppendText($"Installerer EXE med stille parametere...\r\n");
                         break;
-
                     case ".zip":
-                        // ZIP-filer: Kan ikke installeres direkte
                         if (outputBox != null)
                         {
                             outputBox.Text = $"ZIP-filer må pakkes ut manuelt før installasjon.\r\nÅpner mappen hvor filen ligger...\r\n";
@@ -721,25 +722,18 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                         }
                         Logger.Log($"DriverPanel: ZIP-fil åpnet i explorer: {driverPath}");
                         return;
-
                     default:
-                        // Ukjent filtype: Prøv å kjøre direkte
                         psi = new ProcessStartInfo
                         {
                             FileName = driverPath,
                             UseShellExecute = true,
                             Verb = "runas"
                         };
-                        if (outputBox != null)
-                        {
-                            outputBox.AppendText($"Ukjent filtype, starter vanlig installasjon...\r\n");
-                        }
+                        if (outputBox != null) outputBox.AppendText($"Ukjent filtype, starter vanlig installasjon...\r\n");
                         break;
                 }
 
-                // Start installasjonsprosessen
                 var process = Process.Start(psi);
-                
                 if (process != null)
                 {
                     if (outputBox != null)
@@ -748,14 +742,13 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                         outputBox.AppendText($"Venter på at installasjonen skal fullføres...\r\n");
                     }
 
-                    // Vent på at prosessen skal fullføres (asynkront)
                     Task.Run(() =>
                     {
                         try
                         {
                             process.WaitForExit();
                             var exitCode = process.ExitCode;
-                            
+
                             this.Invoke(new Action(() =>
                             {
                                 if (outputBox != null)
@@ -777,7 +770,7 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                                     }
                                 }
                             }));
-                            
+
                             Logger.Log($"DriverPanel: Driver-installasjon fullført med exit code: {exitCode}");
                         }
                         catch (Exception ex)
@@ -795,10 +788,7 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                 }
                 else
                 {
-                    if (outputBox != null)
-                    {
-                        outputBox.AppendText($"❌ Kunne ikke starte installasjonsprosessen.\r\n");
-                    }
+                    if (outputBox != null) outputBox.AppendText($"❌ Kunne ikke starte installasjonsprosessen.\r\n");
                 }
             }
             catch (Exception ex)
@@ -858,9 +848,8 @@ Støttede filtyper:
 - .msi (Windows Installer pakker)  
 - .zip (Komprimerte arkiver - må pakkes ut manuelt)
 
-Merk: Noen drivere krever administrator-rettigheter for installasjon.
+Merk: Noen drivere krever administrator-rettigheter for installasjon.";
 
-For å legge til nye PC-modeller, kontakt systemadministrator.";
 
             if (outputBox != null)
             {
@@ -907,7 +896,7 @@ For å legge til nye PC-modeller, kontakt systemadministrator.";
                 }
                 catch (Exception ex)
                 {
-                    this.Invoke(new Action(() => 
+                    this.Invoke(new Action(() =>
                     {
                         if (outputBox != null)
                         {
@@ -917,6 +906,19 @@ For å legge til nye PC-modeller, kontakt systemadministrator.";
                     Logger.Log($"DriverPanel: Feil ved kjøring av kommando: {ex.Message}");
                 }
             });
+        }
+
+        private void ApplyFullWidth(FlowLayoutPanel layout)
+        {
+            try
+            {
+                // Force a layout pass to get the final client width
+                layout.PerformLayout();
+                int w = Math.Max(100, layout.ClientSize.Width - layout.Padding.Left - layout.Padding.Right);
+                foreach (var b in layout.Controls.OfType<Button>()) b.Width = w;
+                foreach (var lab in layout.Controls.OfType<Label>()) if (!lab.AutoSize) lab.Width = w;
+            }
+            catch { /* ignore */ }
         }
     }
 }

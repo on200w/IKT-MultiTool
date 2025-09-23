@@ -6,6 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+  <!-- Default publish settings -->
+  <PublishSingleFile>true</PublishSingleFile>
+  <SelfContained>true</SelfContained>
+  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  <!-- Trimming WinForms apps often breaks reflection-based features -->
+  <PublishTrimmed>false</PublishTrimmed>
   </PropertyGroup>
 
     <ItemGroup>
