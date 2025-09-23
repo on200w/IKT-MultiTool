@@ -143,13 +143,13 @@ dotnet run</code></pre>
   <li>📦 Publisering: standard single-file, self-contained EXE (win-x64) med admin-krav</li>
   <li>🔒 Administrator via manifest (UAC) ved oppstart</li>
 </ul>
-  <img src="https://i.postimg.cc/QM27DM27/image.png" alt="IKT MultiTool hovedmeny" width="500"><br>
+  <img src="https://i.postimg.cc/gJPNDtyx/image.png" alt="IKT MultiTool hovedmeny" width="500"><br>
   <em>Hovedmeny v2.0: Strømlinjeformet med System, Nettverk, Drivere, Feilsøking og Cache</em>
   <br><br>
-  <img src="https://i.postimg.cc/ZnCzLTqf/image.png" alt="Driver panel" width="500"><br>
+  <img src="https://i.postimg.cc/zBGZ7fFb/image.png" alt="Driver panel" width="500"><br>
   <em>Driver-panel: Administrer PC-modeller og installer drivere enkelt</em>
     <br><br>
-  <img src="https://i.postimg.cc/XvYWvcbS/image.png" alt="Office 48v35 Error code" width="500"><br>
+  <img src="https://i.postimg.cc/tJdcHQkQ/image.png" alt="Office 48v35 Error code" width="500"><br>
   <em>Office-panel: Fikks 48v35 error koden raskt</em>
 </p>
 
