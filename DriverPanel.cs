@@ -663,23 +663,142 @@ Slett denne filen når du har lagt til ekte driver-filer.";
             try
             {
                 var fileName = Path.GetFileName(driverPath);
+                var fileExtension = Path.GetExtension(driverPath).ToLower();
+                
                 if (outputBox != null)
                 {
-                    outputBox.Text = $"Starter installasjon av driver: {fileName}\r\n";
+                    outputBox.Text = $"Starter stille installasjon av driver: {fileName}\r\n";
                 }
-                Logger.Log($"DriverPanel: Starter installasjon av driver: {driverPath}");
+                Logger.Log($"DriverPanel: Starter stille installasjon av driver: {driverPath}");
 
-                var psi = new ProcessStartInfo
-                {
-                    FileName = driverPath,
-                    UseShellExecute = true,
-                    Verb = "runas" // Kjør som administrator
-                };
+                ProcessStartInfo psi;
 
-                Process.Start(psi);
-                if (outputBox != null)
+                // Bestem installasjonsmodus basert på filtype
+                switch (fileExtension)
                 {
-                    outputBox.AppendText($"Driver-installer startet. Følg instruksjonene på skjermen.\r\n");
+                    case ".msi":
+                        // MSI-filer: Bruk msiexec med stille parametere
+                        psi = new ProcessStartInfo
+                        {
+                            FileName = "msiexec.exe",
+                            Arguments = $"/i \"{driverPath}\" /quiet /norestart",
+                            UseShellExecute = true,
+                            Verb = "runas",
+                            CreateNoWindow = true
+                        };
+                        if (outputBox != null)
+                        {
+                            outputBox.AppendText($"Installerer MSI-pakke i stille modus...\r\n");
+                        }
+                        break;
+
+                    case ".exe":
+                        // EXE-filer: Prøv vanlige stille parametere
+                        psi = new ProcessStartInfo
+                        {
+                            FileName = driverPath,
+                            Arguments = "/S /silent /quiet /verysilent /norestart", // Vanlige stille parametere
+                            UseShellExecute = true,
+                            Verb = "runas",
+                            CreateNoWindow = true
+                        };
+                        if (outputBox != null)
+                        {
+                            outputBox.AppendText($"Installerer EXE med stille parametere...\r\n");
+                        }
+                        break;
+
+                    case ".zip":
+                        // ZIP-filer: Kan ikke installeres direkte
+                        if (outputBox != null)
+                        {
+                            outputBox.Text = $"ZIP-filer må pakkes ut manuelt før installasjon.\r\nÅpner mappen hvor filen ligger...\r\n";
+                        }
+                        var zipFolder = Path.GetDirectoryName(driverPath);
+                        if (!string.IsNullOrEmpty(zipFolder))
+                        {
+                            Process.Start("explorer.exe", $"/select,\"{driverPath}\"");
+                        }
+                        Logger.Log($"DriverPanel: ZIP-fil åpnet i explorer: {driverPath}");
+                        return;
+
+                    default:
+                        // Ukjent filtype: Prøv å kjøre direkte
+                        psi = new ProcessStartInfo
+                        {
+                            FileName = driverPath,
+                            UseShellExecute = true,
+                            Verb = "runas"
+                        };
+                        if (outputBox != null)
+                        {
+                            outputBox.AppendText($"Ukjent filtype, starter vanlig installasjon...\r\n");
+                        }
+                        break;
+                }
+
+                // Start installasjonsprosessen
+                var process = Process.Start(psi);
+                
+                if (process != null)
+                {
+                    if (outputBox != null)
+                    {
+                        outputBox.AppendText($"Installasjon startet (Process ID: {process.Id})\r\n");
+                        outputBox.AppendText($"Venter på at installasjonen skal fullføres...\r\n");
+                    }
+
+                    // Vent på at prosessen skal fullføres (asynkront)
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            process.WaitForExit();
+                            var exitCode = process.ExitCode;
+                            
+                            this.Invoke(new Action(() =>
+                            {
+                                if (outputBox != null)
+                                {
+                                    if (exitCode == 0)
+                                    {
+                                        outputBox.AppendText($"✅ Installasjon fullført med suksess!\r\n");
+                                        outputBox.AppendText($"Driver '{fileName}' er nå installert.\r\n");
+                                    }
+                                    else if (exitCode == 3010)
+                                    {
+                                        outputBox.AppendText($"⚠️ Installasjon fullført, men krever omstart.\r\n");
+                                        outputBox.AppendText($"Restart datamaskinen for å fullføre installasjonen.\r\n");
+                                    }
+                                    else
+                                    {
+                                        outputBox.AppendText($"❌ Installasjon fullført med feilkode: {exitCode}\r\n");
+                                        outputBox.AppendText($"Dette kan bety at driveren allerede er installert eller at det oppstod en feil.\r\n");
+                                    }
+                                }
+                            }));
+                            
+                            Logger.Log($"DriverPanel: Driver-installasjon fullført med exit code: {exitCode}");
+                        }
+                        catch (Exception ex)
+                        {
+                            this.Invoke(new Action(() =>
+                            {
+                                if (outputBox != null)
+                                {
+                                    outputBox.AppendText($"Feil under overvåking av installasjon: {ex.Message}\r\n");
+                                }
+                            }));
+                            Logger.Log($"DriverPanel: Feil under overvåking av installasjon: {ex.Message}");
+                        }
+                    });
+                }
+                else
+                {
+                    if (outputBox != null)
+                    {
+                        outputBox.AppendText($"❌ Kunne ikke starte installasjonsprosessen.\r\n");
+                    }
                 }
             }
             catch (Exception ex)
@@ -688,6 +807,7 @@ Slett denne filen når du har lagt til ekte driver-filer.";
                 if (outputBox != null)
                 {
                     outputBox.Text = $"Feil ved start av installasjon: {ex.Message}\r\n";
+                    outputBox.AppendText($"Prøv å kjøre programmet som administrator.\r\n");
                 }
             }
         }
